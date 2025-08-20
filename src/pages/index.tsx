@@ -4,16 +4,47 @@ import "@mantine/core/styles.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import {
+  Badge,
   Box,
+  Button,
+  Card,
+  Center,
   Container,
   createTheme,
+  Divider,
+  Flex,
   Grid,
+  Group,
   MantineProvider,
+  SegmentedControl,
   Text,
   ThemeIcon,
   Title,
+  Transition,
 } from "@mantine/core";
-import { SiGithub, SiLinkedin, SiStackoverflow } from "react-icons/si";
+import {
+  SiGithub,
+  SiLinkedin,
+  SiNextdotjs,
+  SiOpenai,
+  SiStackoverflow,
+} from "react-icons/si";
+import { useEffect, useState } from "react";
+import Experience from "./components/Experience";
+import { PiSparkle } from "react-icons/pi";
+import { FiMoreHorizontal } from "react-icons/fi";
+import Education from "./components/Education";
+import {
+  ICertificationProps,
+  IEducationProps,
+  IExperienceProps,
+} from "./interfaces";
+
+import experience from "@/pages/data/work";
+import education from "@/pages/data/education";
+import certifications from "@/pages/data/certifications";
+import Certification from "./components/Certification";
+import work from "@/pages/data/work";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -31,18 +62,59 @@ export default function Home() {
       // or replace default theme color
       dark: [
         "#ffffff",
-        "#78e110",
+        "#b0b0b0",
         "#8600b3",
         "#0021c8",
-        "#d4df08",
-        "#14f814",
-        "#d77e02",
+        "#323232",
+        "#FD7E1433",
         "#000000",
-        "#79ea00",
+        "#000000",
+        "#242424d5",
         "#d80073",
       ],
     },
+    defaultRadius: "lg",
+    fontSizes: {
+      xs: "0.75rem",
+      sm: "0.875rem",
+      md: "1rem",
+      lg: "1.125rem",
+      xl: "1.25rem",
+    },
+    lineHeights: {
+      md: "1.8rem",
+    },
   });
+  const sections = ["about", "experience", "projects"];
+
+  const [activeSection, setActiveSection] = useState("about");
+  const [opened, setOpened] = useState(false);
+
+  useEffect(() => {
+    const scrollContainer = document.querySelector("main"); // the Grid.Col main
+    if (!scrollContainer) return;
+
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            setActiveSection(entry.target.id);
+          }
+        });
+      },
+      {
+        root: scrollContainer, // ← observe relative to main, not viewport
+        threshold: 0.5,
+      }
+    );
+
+    sections.forEach((id) => {
+      const el = document.getElementById(id);
+      if (el) observer.observe(el);
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   return (
     <>
@@ -54,52 +126,181 @@ export default function Home() {
       </Head>
 
       <MantineProvider defaultColorScheme="dark" theme={theme}>
-        <Container size="xl">
+        <Container h="100vh" size={1200}>
           <Grid>
             <Grid.Col
-              span={{ xs: 6, sm: 6, md: 6, lg: 3, xl: 3 }}
+              span={{ xs: 6, sm: 6, md: 6, lg: 4, xl: 4 }}
               h="100vh"
               component="header"
             >
-              <Title fw={500} mt="2rem" order={1}>
-                Vidarshan
-              </Title>
-              <Title size={20} fw={400} order={2}>
-                Software Engineer — Web, Mobile, AI & Cloud
-              </Title>
-              <Box mt="3rem" component="nav">
-                <Box component="ul">
-                  <Box component="li">
-                    <Text size="xl" component="a" href="#">
-                      About
-                    </Text>
-                  </Box>
-                  <Box component="li">
-                    <Text component="a" href="#">
-                      Projects
-                    </Text>
-                  </Box>
-                  <Box component="li">
-                    <Text component="a" href="#">
-                      Contact
-                    </Text>
-                  </Box>
+              <Flex h="80%" direction="column" justify="space-around">
+                <Box>
+                  <Text
+                    className="apple-text"
+                    size="2.4rem"
+                    fw={400}
+                    // order={1}
+                  >
+                    Vidarshan
+                  </Text>
+                  <Title c="gray" size="1.2rem" fw={400} order={2}>
+                    Software Engineer — Web, Mobile, AI & Cloud
+                  </Title>
+                  <SegmentedControl
+                    data={[
+                      {
+                        value: "web",
+                        label: (
+                          <Center style={{ gap: 10 }}>
+                            <SiNextdotjs />
+                            <span className="apple-text">Web view</span>
+                          </Center>
+                        ),
+                      },
+                      {
+                        value: "ai",
+                        label: (
+                          <Center style={{ gap: 10 }}>
+                            <PiSparkle />
+
+                            <span>Intelligence</span>
+                          </Center>
+                        ),
+                      },
+                    ]}
+                  />
                 </Box>
-              </Box>
-              <Box mt="3rem">
-                <SiGithub size={20} style={{ marginRight: "6px" }} />
 
-                <SiStackoverflow size={20} style={{ marginRight: "6px" }} />
+                <Flex direction="column" component="nav">
+                  {sections.map((id) => (
+                    <Text
+                      key={id}
+                      component="a"
+                      href={`#${id}`}
+                      className="ai-text"
+                      mb={20}
+                      style={{
+                        transition: "all 0.3s ease", // <--- smooth animation
+                      }}
+                      size={activeSection === `${id}` ? "2rem" : "1rem"}
+                      // fw={activeSection === `${id}` ? 700 : 400}
+                    >
+                      {id.charAt(0).toUpperCase() + id.slice(1)}
+                    </Text>
+                  ))}
+                </Flex>
+                <Box>
+                  <SiGithub size={24} style={{ marginRight: "12px" }} />
 
-                <SiLinkedin size={20} style={{ marginRight: "6px" }} />
-              </Box>
+                  <SiStackoverflow size={24} style={{ marginRight: "12px" }} />
+
+                  <SiLinkedin size={24} style={{ marginRight: "12px" }} />
+                </Box>
+              </Flex>
             </Grid.Col>
 
             <Grid.Col
-              span={{ xs: 6, sm: 6, md: 6, lg: 9, xl: 9 }}
+              span={{ xs: 6, sm: 6, md: 6, lg: 8, xl: 8 }}
+              style={{ overflowY: "scroll", scrollBehavior: "smooth" }}
+              h="100vh"
               component="main"
             >
-              content goes here
+              <Box
+                style={{ marginTop: "4rem", marginLeft: "2rem" }}
+                id="about"
+                component="section"
+              >
+                <Text style={{ lineHeight: 1.8 }}>
+                  I design and build digital products that make work simpler,
+                  smarter, and more enjoyable. With nearly four years of
+                  software engineering experience, I create solutions that don’t
+                  just function—they elevate user experiences and drive real
+                  results.
+                </Text>
+                <Text style={{ lineHeight: 1.8 }} mt="1.4rem">
+                  Curious by nature and driven by impact, I explore emerging
+                  tech in AI and cloud infrastructure to push products beyond
+                  the expected—whether through smarter automation,
+                  personalization, or rock-solid scalability. I thrive on
+                  turning complex challenges into intuitive, future-ready
+                  software that aligns perfectly with user and business goals.
+                </Text>
+                <Group justify="flex-end">
+                  <Button
+                    leftSection={<FiMoreHorizontal />}
+                    variant="transparent"
+                    size="sm"
+                    color="teal"
+                    onClick={() => setOpened((o) => !o)}
+                  >
+                    {opened ? "Less" : "More"}
+                  </Button>
+                </Group>
+                <Transition
+                  mounted={opened}
+                  duration={600}
+                  timingFunction="ease"
+                  transition="fade-down"
+                  keepMounted
+                >
+                  {(styles) => (
+                    <Box style={styles}>
+                      <Title my="sm" fw={500} order={3}>
+                        Certifications
+                      </Title>
+                      <Grid>
+                        {certifications.map((cert: ICertificationProps) => {
+                          return <Certification key={cert.title} {...cert} />;
+                        })}
+                      </Grid>
+                      <Title my="sm" fw={500} order={3}>
+                        Education
+                      </Title>
+                      <Grid>
+                        {education.map((edu: IEducationProps) => {
+                          return <Education key={edu.title} {...edu} />;
+                        })}
+                      </Grid>
+                    </Box>
+                  )}
+                </Transition>
+              </Box>
+              <Box
+                style={{ marginTop: "4rem", marginLeft: "2rem" }}
+                id="experience"
+                mt={200}
+                component="section"
+              >
+                {work.map(({ company, jobs, link }) => (
+                  <Experience
+                    key={company}
+                    jobs={jobs}
+                    company={company}
+                    link={link}
+                  />
+                ))}
+                {/* <Title order={3}>Experience</Title> */}
+              </Box>
+              <Box
+                style={{ marginTop: "4rem", marginLeft: "2rem" }}
+                id="projects"
+                mt={200}
+                component="section"
+              >
+                <Text>Projects</Text>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card>
+                <Card p={40}></Card> <Card p={40}></Card>
+              </Box>
             </Grid.Col>
           </Grid>
         </Container>

@@ -12,7 +12,7 @@
   }
 }
 
-h1, h2, p, main, header, footer, nav, ul, li, a{
+h1, h2, h3, h4, h5, h6, p, main, header, footer, nav, ul, li, a, span{
       font-family: "Geist", sans-serif !important;
 }
 
@@ -32,4 +32,23 @@ body {
   box-sizing: border-box;
   padding: 0;
   margin: 0;
+}
+
+
+.mantine-SegmentedControl-innerLabel{
+    color: #ffa94d;
+}
+
+.ai-text {
+  background: linear-gradient(
+    90deg,
+    #0A84FF,   /* blue */
+    #8E44AD,   /* purple */
+    #E84393,   /* pink */
+    #FF3B30,   /* red */
+    #FF9500    /* orange */
+  );
+  transition: all 0.3s ease;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
