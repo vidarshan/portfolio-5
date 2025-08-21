@@ -4,6 +4,7 @@ import "@mantine/core/styles.css";
 import { Geist, Geist_Mono } from "next/font/google";
 import styles from "@/styles/Home.module.css";
 import {
+  ActionIcon,
   Badge,
   Box,
   Button,
@@ -38,13 +39,27 @@ import {
   ICertificationProps,
   IEducationProps,
   IExperienceProps,
+  IProject,
 } from "./interfaces";
 
 import experience from "@/pages/data/work";
 import education from "@/pages/data/education";
 import certifications from "@/pages/data/certifications";
+import projects from "@/pages/data/projects";
+
 import Certification from "./components/Certification";
 import work from "@/pages/data/work";
+import Project from "./components/Project";
+import { VscAdd } from "react-icons/vsc";
+import {
+  RiAddLargeLine,
+  RiGithubFill,
+  RiLinkedinBoxFill,
+  RiStackOverflowFill,
+  RiSubtractFill,
+  RiTwitterXFill,
+} from "react-icons/ri";
+import Socials from "./components/Socials";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -66,7 +81,7 @@ export default function Home() {
         "#8600b3",
         "#0021c8",
         "#323232",
-        "#FD7E1433",
+        "#ffffff",
         "#000000",
         "#000000",
         "#242424d5",
@@ -88,7 +103,8 @@ export default function Home() {
   const sections = ["about", "experience", "projects"];
 
   const [activeSection, setActiveSection] = useState("about");
-  const [opened, setOpened] = useState(false);
+  const [educationOpened, setEducationOpened] = useState(false);
+  const [certificationsOpened, setCertificationsOpened] = useState(false);
 
   useEffect(() => {
     const scrollContainer = document.querySelector("main"); // the Grid.Col main
@@ -146,29 +162,7 @@ export default function Home() {
                   <Title c="gray" size="1.2rem" fw={400} order={2}>
                     Software Engineer — Web, Mobile, AI & Cloud
                   </Title>
-                  <SegmentedControl
-                    data={[
-                      {
-                        value: "web",
-                        label: (
-                          <Center style={{ gap: 10 }}>
-                            <SiNextdotjs />
-                            <span className="apple-text">Web view</span>
-                          </Center>
-                        ),
-                      },
-                      {
-                        value: "ai",
-                        label: (
-                          <Center style={{ gap: 10 }}>
-                            <PiSparkle />
-
-                            <span>Intelligence</span>
-                          </Center>
-                        ),
-                      },
-                    ]}
-                  />
+                  <Socials />
                 </Box>
 
                 <Flex direction="column" component="nav">
@@ -189,13 +183,6 @@ export default function Home() {
                     </Text>
                   ))}
                 </Flex>
-                <Box>
-                  <SiGithub size={24} style={{ marginRight: "12px" }} />
-
-                  <SiStackoverflow size={24} style={{ marginRight: "12px" }} />
-
-                  <SiLinkedin size={24} style={{ marginRight: "12px" }} />
-                </Box>
               </Flex>
             </Grid.Col>
 
@@ -205,72 +192,67 @@ export default function Home() {
               h="100vh"
               component="main"
             >
-              <Box
-                style={{ marginTop: "4rem", marginLeft: "2rem" }}
-                id="about"
-                component="section"
-              >
-                <Text style={{ lineHeight: 1.8 }}>
+              <Box my="xl" id="about" component="section">
+                <Text>
                   I design and build digital products that make work simpler,
                   smarter, and more enjoyable. With nearly four years of
                   software engineering experience, I create solutions that don’t
-                  just function—they elevate user experiences and drive real
+                  just function; they elevate user experiences and drive real
                   results.
                 </Text>
-                <Text style={{ lineHeight: 1.8 }} mt="1.4rem">
+                <Text mt="lg">
                   Curious by nature and driven by impact, I explore emerging
                   tech in AI and cloud infrastructure to push products beyond
-                  the expected—whether through smarter automation,
+                  the expected --whether through smarter automation,
                   personalization, or rock-solid scalability. I thrive on
                   turning complex challenges into intuitive, future-ready
                   software that aligns perfectly with user and business goals.
                 </Text>
-                <Group justify="flex-end">
-                  <Button
-                    leftSection={<FiMoreHorizontal />}
-                    variant="transparent"
-                    size="sm"
-                    color="teal"
-                    onClick={() => setOpened((o) => !o)}
+
+                <Flex my="sm" align="center" justify="space-between">
+                  <Text fw={500}>Certifications</Text>
+                  <ActionIcon
+                    onClick={() =>
+                      setCertificationsOpened(!certificationsOpened)
+                    }
+                    variant="light"
+                    color="cyan"
                   >
-                    {opened ? "Less" : "More"}
-                  </Button>
-                </Group>
-                <Transition
-                  mounted={opened}
-                  duration={600}
-                  timingFunction="ease"
-                  transition="fade-down"
-                  keepMounted
-                >
-                  {(styles) => (
-                    <Box style={styles}>
-                      <Title my="sm" fw={500} order={3}>
-                        Certifications
-                      </Title>
-                      <Grid>
-                        {certifications.map((cert: ICertificationProps) => {
-                          return <Certification key={cert.title} {...cert} />;
-                        })}
-                      </Grid>
-                      <Title my="sm" fw={500} order={3}>
-                        Education
-                      </Title>
-                      <Grid>
-                        {education.map((edu: IEducationProps) => {
-                          return <Education key={edu.title} {...edu} />;
-                        })}
-                      </Grid>
-                    </Box>
-                  )}
-                </Transition>
+                    {certificationsOpened ? (
+                      <RiSubtractFill />
+                    ) : (
+                      <RiAddLargeLine />
+                    )}
+                  </ActionIcon>
+                </Flex>
+                {certificationsOpened && (
+                  <Grid>
+                    {certifications.map((cert: ICertificationProps) => {
+                      return <Certification key={cert.title} {...cert} />;
+                    })}
+                  </Grid>
+                )}
+                <Flex my="sm" align="center" justify="space-between">
+                  <Text mt="sm" fw={500}>
+                    Education
+                  </Text>
+                  <ActionIcon
+                    onClick={() => setEducationOpened(!educationOpened)}
+                    variant="light"
+                    color="cyan"
+                  >
+                    {educationOpened ? <RiSubtractFill /> : <RiAddLargeLine />}
+                  </ActionIcon>
+                </Flex>
+                {educationOpened && (
+                  <Grid>
+                    {education.map((edu: IEducationProps) => {
+                      return <Education key={edu.title} {...edu} />;
+                    })}
+                  </Grid>
+                )}
               </Box>
-              <Box
-                style={{ marginTop: "4rem", marginLeft: "2rem" }}
-                id="experience"
-                mt={200}
-                component="section"
-              >
+              <Box id="experience" component="section">
                 {work.map(({ company, jobs, link }) => (
                   <Experience
                     key={company}
@@ -281,25 +263,37 @@ export default function Home() {
                 ))}
                 {/* <Title order={3}>Experience</Title> */}
               </Box>
-              <Box
-                style={{ marginTop: "4rem", marginLeft: "2rem" }}
-                id="projects"
-                mt={200}
-                component="section"
-              >
+              <Box id="projects" component="section">
+                <SegmentedControl
+                  radius="xl"
+                  size="sm"
+                  variant="filled"
+                  color="dark"
+                  data={[
+                    {
+                      value: "preview",
+                      label: (
+                        <Center style={{ gap: 10 }}>
+                          {/* <IconEye size={16} /> */}
+                          <span>Projects</span>
+                        </Center>
+                      ),
+                    },
+                    {
+                      value: "code",
+                      label: (
+                        <Center style={{ gap: 10 }}>
+                          {/* <IconCode size={16} /> */}
+                          <span>Archive</span>
+                        </Center>
+                      ),
+                    },
+                  ]}
+                />
                 <Text>Projects</Text>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card>
-                <Card p={40}></Card> <Card p={40}></Card>
+                {projects.map((project) => {
+                  return <Project key={project.name} {...project} />;
+                })}
               </Box>
             </Grid.Col>
           </Grid>

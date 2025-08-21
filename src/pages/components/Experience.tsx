@@ -66,37 +66,6 @@ const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
           </Box>
         );
       })}
-      {/* <Group justify="space-between">
-        <Text className="ai-text" fw={500}>
-          {title} at{" "}
-          <Anchor target="_blank" href={link}>
-            {company}
-          </Anchor>
-        </Text>
-
-        <Text size="sm">{date}</Text>
-      </Group>
-      <Group my=".6rem">
-        <Text c="gray" style={{ lineHeight: 1.8 }} mt="sm" size="sm">
-          {description}
-        </Text>
-      </Group>
-      <Group mt={8}>
-        {skills.map((tech: string) => {
-          return (
-            <Badge
-              key={tech}
-              size="lg"
-              fw={400}
-              color="grape"
-              tt="capitalize"
-              variant="light"
-            >
-              {tech}
-            </Badge>
-          );
-        })}
-      </Group> */}
     </Card>
   );
 };

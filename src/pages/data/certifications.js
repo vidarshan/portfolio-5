@@ -1,9 +1,9 @@
 const certifications = [
   {
-    title: "React Native - The Practical Guide",
-    year: "2024",
-    organization: "Udemy",
-    status: "Completed",
+    title: "AWS Certified Cloud Practitioner",
+    year: "2025",
+    organization: "Amazon Web Services (AWS)",
+    status: "In Progress",
   },
   {
     title: "Python Essential Training",
@@ -18,10 +18,10 @@ const certifications = [
     status: "In Progress",
   },
   {
-    title: "AWS Certified Cloud Practitioner",
-    year: "2025",
-    organization: "Amazon Web Services (AWS)",
-    status: "In Progress",
+    title: "React Native - The Practical Guide",
+    year: "2024",
+    organization: "Udemy",
+    status: "Completed",
   },
 ];
 

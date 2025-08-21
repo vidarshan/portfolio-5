@@ -22,3 +22,14 @@ export interface IWork {
   jobs: IExperienceProps[];
   link: string;
 }
+
+export interface IProject {
+  name: string;
+  description: string;
+  image: string;
+  repo: string;
+  demo: string;
+  tags: string;
+  year: string;
+  technologies: string[];
+}
