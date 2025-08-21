@@ -149,8 +149,8 @@ export default function Home() {
               h="100vh"
               component="header"
             >
-              <Flex h="80%" direction="column" justify="space-around">
-                <Box>
+              <Flex justify="space-around" h="80%" direction="column">
+                <Box bg='blue'>
                   <Text
                     className="apple-text"
                     size="2.4rem"
@@ -159,7 +159,13 @@ export default function Home() {
                   >
                     Vidarshan
                   </Text>
-                  <Title c="gray" size="1.2rem" fw={400} order={2}>
+                  <Title
+                    className="ai-text"
+                    c="gray"
+                    size="1.2rem"
+                    fw={400}
+                    order={2}
+                  >
                     Software Engineer — Web, Mobile, AI & Cloud
                   </Title>
                   <Socials />
@@ -172,12 +178,10 @@ export default function Home() {
                       component="a"
                       href={`#${id}`}
                       className="ai-text"
-                      mb={20}
                       style={{
                         transition: "all 0.3s ease", // <--- smooth animation
                       }}
                       size={activeSection === `${id}` ? "2rem" : "1rem"}
-                      // fw={activeSection === `${id}` ? 700 : 400}
                     >
                       {id.charAt(0).toUpperCase() + id.slice(1)}
                     </Text>

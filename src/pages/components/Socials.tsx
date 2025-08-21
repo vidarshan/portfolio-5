@@ -1,4 +1,4 @@
-import { ActionIcon, Flex } from "@mantine/core";
+import { ActionIcon, Flex, Group } from "@mantine/core";
 import React from "react";
 import {
   RiGithubFill,
@@ -9,19 +9,11 @@ import {
 
 const Socials = () => {
   return (
-    <Flex>
-      <ActionIcon>
-        <RiGithubFill />
-      </ActionIcon>
-      <ActionIcon>
-        <RiStackOverflowFill />
-      </ActionIcon>
-      <ActionIcon>
-        <RiLinkedinBoxFill />
-      </ActionIcon>
-      <ActionIcon>
-        <RiTwitterXFill />
-      </ActionIcon>
+    <Flex gap="xs" mt="xs">
+      <RiGithubFill size="1.4rem" />
+      <RiStackOverflowFill size="1.4rem" />
+      <RiLinkedinBoxFill size="1.4rem" />
+      <RiTwitterXFill size="1.4rem" />
     </Flex>
   );
 };
