@@ -86,7 +86,7 @@ const work = [
     jobs: [
       {
         title: "Intern Software Engineer",
-        date: "August 2020 - April 2021",
+        date: "September 2020 - April 2021",
         description:
           "Contributed to existing React JS web applications by extending and enhancing functionality, while designing and implementing modern user interfaces. Built complete web applications for small- to mid-scale businesses and gained hands-on experience deploying applications to the web, ensuring reliable performance and smooth user experiences.",
         skills: [

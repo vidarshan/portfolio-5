@@ -1,3 +1,5 @@
+import { JSX } from "react";
+
 export interface IEducationProps {
   title: string;
   description: string;
@@ -8,6 +10,8 @@ export interface ICertificationProps {
   year: string;
   organization: string;
   status: string;
+  order?: number;
+  icon: JSX.Element;
 }
 
 export interface IExperienceProps {

@@ -19,13 +19,14 @@ const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
   return (
     <Card mt="1rem" p={20} withBorder>
       <Group justify="space-between" align="center">
-        <Text size="lg" fw={500}>
+        <Text className="ai-text" size="lg" fw={500}>
           {company}
         </Text>
         {link !== "null" && (
           <ActionIcon
             variant="light"
-            color="cyan"
+            color="white"
+            bg="#ffffff1d"
             component="a"
             target="_blank"
             href={link}
@@ -37,7 +38,7 @@ const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
       {jobs.map((job: IExperienceProps, index: number) => {
         return (
           <Box key={job.date} mt="1rem">
-            <Text className="ai-text" size="md" fw={500}>
+            <Text size="md" fw={500}>
               {job.title} · {job.date}
             </Text>
             <Text c="gray" style={{ lineHeight: 1.8 }} mt="sm" size="sm">
@@ -50,10 +51,12 @@ const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
                   <Badge
                     key={tech}
                     size="md"
-                    fw={400}
-                    color="cyan"
+                    fw={500}
                     tt="capitalize"
                     variant="light"
+                    c="gray"
+                    style={{ backgroundColor: "#ffffff1d" }}
+                    color="white"
                   >
                     {tech}
                   </Badge>

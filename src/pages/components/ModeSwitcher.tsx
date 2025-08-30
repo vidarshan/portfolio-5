@@ -1,29 +1,32 @@
-import { Center, SegmentedControl } from "@mantine/core";
+import { Box, Center, SegmentedControl } from "@mantine/core";
 import React from "react";
+import { RiGlobeLine, RiSparklingLine } from "react-icons/ri";
 
-const ModeSwitcher = () => {
+interface ModeSwitcherProps {
+  mode: string;
+  setMode: (mode: string) => void;
+}
+
+const ModeSwitcher = ({ mode, setMode }: ModeSwitcherProps) => {
   return (
-    <SegmentedControl
-      radius="xl"
-      data={[
-        {
-          value: "web",
-          label: (
-            <Center style={{ gap: 10 }}>
-              <span className="apple-text">Web view</span>
-            </Center>
-          ),
-        },
-        {
-          value: "ai",
-          label: (
-            <Center style={{ gap: 10 }}>
-              <span>Intelligence</span>
-            </Center>
-          ),
-        },
-      ]}
-    />
+    <Box mt="4rem">
+      <SegmentedControl
+        radius="xl"
+        value={mode}
+        size="xs"
+        onChange={setMode}
+        data={[
+          {
+            value: "web",
+            label: "Web View",
+          },
+          {
+            value: "ai",
+            label: "Intelligence",
+          },
+        ]}
+      />
+    </Box>
   );
 };
 

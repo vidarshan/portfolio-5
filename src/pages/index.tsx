@@ -1,65 +1,49 @@
 import Head from "next/head";
-import Image from "next/image";
 import "@mantine/core/styles.css";
 import { Geist, Geist_Mono } from "next/font/google";
-import styles from "@/styles/Home.module.css";
 import {
   ActionIcon,
-  Badge,
+  Affix,
   Box,
   Button,
-  Card,
-  Center,
   Container,
-  createTheme,
-  Divider,
   Flex,
   Grid,
-  Group,
+  List,
   MantineProvider,
-  SegmentedControl,
+  Modal,
+  Popover,
   Text,
-  ThemeIcon,
+  TextInput,
   Title,
   Transition,
 } from "@mantine/core";
-import {
-  SiGithub,
-  SiLinkedin,
-  SiNextdotjs,
-  SiOpenai,
-  SiStackoverflow,
-} from "react-icons/si";
+import { RiAddLargeLine, RiSubtractFill, RiArrowUpLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
 import Experience from "./components/Experience";
-import { PiSparkle } from "react-icons/pi";
-import { FiMoreHorizontal } from "react-icons/fi";
 import Education from "./components/Education";
-import {
-  ICertificationProps,
-  IEducationProps,
-  IExperienceProps,
-  IProject,
-} from "./interfaces";
+import Certification from "./components/Certification";
+import Project from "./components/Project";
+import Socials from "./components/Socials";
+import ModeSwitcher from "./components/ModeSwitcher";
+import { motion } from "framer-motion";
+import QuickQuestion from "./components/QuickQuestion";
+import Navigator from "./components/Navigator";
+import { ColorSchemeScript } from "@mantine/core";
 
 import experience from "@/pages/data/work";
 import education from "@/pages/data/education";
 import certifications from "@/pages/data/certifications";
 import projects from "@/pages/data/projects";
-
-import Certification from "./components/Certification";
-import work from "@/pages/data/work";
-import Project from "./components/Project";
-import { VscAdd } from "react-icons/vsc";
-import {
-  RiAddLargeLine,
-  RiGithubFill,
-  RiLinkedinBoxFill,
-  RiStackOverflowFill,
-  RiSubtractFill,
-  RiTwitterXFill,
-} from "react-icons/ri";
-import Socials from "./components/Socials";
+import questions from "@/pages/data/questions";
+import styles from "@/styles/Home.module.css";
+import { BsFillPlusCircleFill } from "react-icons/bs";
+import { FiMoon } from "react-icons/fi";
+import { useDisclosure } from "@mantine/hooks";
+import IntelligenceMenu from "./components/IntelligenceMenu";
+import OrbBackground from "./components/OrbBackground";
+import { FaCircleArrowUp } from "react-icons/fa6";
+import { SiOpenai } from "react-icons/si";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -72,19 +56,18 @@ const geistMono = Geist_Mono({
 });
 
 export default function Home() {
-  const theme = createTheme({
+  const theme = {
     colors: {
-      // or replace default theme color
       dark: [
+        "#e8e8e8",
+        "#f7f7f7",
         "#ffffff",
-        "#b0b0b0",
-        "#8600b3",
-        "#0021c8",
+        "#aaaaaa",
         "#323232",
-        "#ffffff",
+        "#2e2e2e",
         "#000000",
         "#000000",
-        "#242424d5",
+        "#161616",
         "#d80073",
       ],
     },
@@ -99,17 +82,55 @@ export default function Home() {
     lineHeights: {
       md: "1.8rem",
     },
-  });
-  const sections = ["about", "experience", "projects"];
+  };
 
+  const [colorScheme, setColorScheme] = useState<"light" | "dark" | "auto">(
+    "light"
+  );
+  const sections = ["about", "experience", "projects"];
+  const [mode, setMode] = useState("web");
   const [activeSection, setActiveSection] = useState("about");
+  const [opened, { open, close }] = useDisclosure(true);
   const [educationOpened, setEducationOpened] = useState(false);
   const [certificationsOpened, setCertificationsOpened] = useState(false);
 
-  useEffect(() => {
-    const scrollContainer = document.querySelector("main"); // the Grid.Col main
-    if (!scrollContainer) return;
+  const [messages, setMessages] = useState([
+    { sender: "bot", text: "Hi! How can I help you today?" },
+  ]);
+  const [input, setInput] = useState("");
+  const [chatOpened, setChatOpened] = useState(false);
 
+  useEffect(() => {
+    const saved = localStorage.getItem("mantine-color-scheme");
+    if (saved === "dark" || saved === "light") setColorScheme(saved);
+    else setColorScheme("auto");
+  }, []);
+
+  const toggleScheme = () => {
+    const next = colorScheme === "dark" ? "light" : "dark";
+    setColorScheme(next);
+    localStorage.setItem("mantine-color-scheme", next);
+  };
+
+  const handleSend = () => {
+    if (!input.trim()) return;
+
+    // Add user message
+    const newMessages = [...messages, { sender: "user", text: input }];
+    setMessages(newMessages);
+
+    // Simulate bot reply
+    setTimeout(() => {
+      setMessages((prev) => [
+        ...prev,
+        { sender: "bot", text: "Got it! You said: " + input },
+      ]);
+    }, 1000);
+
+    setInput("");
+  };
+
+  useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
@@ -118,10 +139,7 @@ export default function Home() {
           }
         });
       },
-      {
-        root: scrollContainer, // ← observe relative to main, not viewport
-        threshold: 0.5,
-      }
+      { root: null, threshold: 0.5 }
     );
 
     sections.forEach((id) => {
@@ -130,7 +148,7 @@ export default function Home() {
     });
 
     return () => observer.disconnect();
-  }, []);
+  }, [sections, setActiveSection]);
 
   return (
     <>
@@ -140,169 +158,171 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-
-      <MantineProvider defaultColorScheme="dark" theme={theme}>
-        <Container h="100vh" size={1200}>
+      <MantineProvider
+        theme={{
+          ...theme,
+        }}
+        defaultColorScheme="light"
+      >
+        <Container size={1200}>
           <Grid>
+            {/* Left Sidebar */}
             <Grid.Col
-              span={{ xs: 6, sm: 6, md: 6, lg: 4, xl: 4 }}
-              h="100vh"
               component="header"
+              span={{ xs: 6, sm: 6, md: 6, lg: 5, xl: 5 }}
+              top={0}
+              pos="sticky"
+              h="100vh"
             >
-              <Flex justify="space-around" h="80%" direction="column">
-                <Box bg='blue'>
-                  <Text
-                    className="apple-text"
-                    size="2.4rem"
-                    fw={400}
-                    // order={1}
-                  >
+              <Flex mt="xl" h="80%" direction="column" justify="space-between">
+                <Box>
+                  <Text className="ai-text" c="#74c0fc" size="2.4rem" fw={400}>
                     Vidarshan
                   </Text>
-                  <Title
-                    className="ai-text"
-                    c="gray"
-                    size="1.2rem"
-                    fw={400}
-                    order={2}
-                  >
+                  <Title mt="sm" c="gray" size="1.2rem" fw={400}>
                     Software Engineer — Web, Mobile, AI & Cloud
                   </Title>
                   <Socials />
+                  <Box mt="4rem" component="nav">
+                    <List>
+                      <List.Item
+                        className={activeSection === "about" ? "ai-text" : ""}
+                        style={{ fontSize: "1.2rem" }}
+                        mb="0.3rem"
+                        fw={500}
+                      >
+                        About
+                      </List.Item>
+                      <List.Item
+                        className={
+                          activeSection === "experience" ? "ai-text" : ""
+                        }
+                        style={{ fontSize: "1.2rem" }}
+                        mb="0.3rem"
+                        fw={500}
+                      >
+                        Experience
+                      </List.Item>
+                      <List.Item
+                        className={
+                          activeSection === "projects" ? "ai-text" : ""
+                        }
+                        style={{ fontSize: "1.2rem" }}
+                        mb="0.3rem"
+                        fw={500}
+                      >
+                        Projects
+                      </List.Item>
+                    </List>
+                  </Box>
                 </Box>
-
-                <Flex direction="column" component="nav">
-                  {sections.map((id) => (
-                    <Text
-                      key={id}
-                      component="a"
-                      href={`#${id}`}
-                      className="ai-text"
-                      style={{
-                        transition: "all 0.3s ease", // <--- smooth animation
-                      }}
-                      size={activeSection === `${id}` ? "2rem" : "1rem"}
-                    >
-                      {id.charAt(0).toUpperCase() + id.slice(1)}
-                    </Text>
-                  ))}
-                </Flex>
+                <ModeSwitcher mode={mode} setMode={setMode} />
               </Flex>
             </Grid.Col>
 
+            {/* Right Main Content */}
             <Grid.Col
-              span={{ xs: 6, sm: 6, md: 6, lg: 8, xl: 8 }}
-              style={{ overflowY: "scroll", scrollBehavior: "smooth" }}
-              h="100vh"
+              span={{ xs: 6, sm: 6, md: 6, lg: 7, xl: 7 }}
               component="main"
             >
-              <Box my="xl" id="about" component="section">
-                <Text>
-                  I design and build digital products that make work simpler,
-                  smarter, and more enjoyable. With nearly four years of
-                  software engineering experience, I create solutions that don’t
-                  just function; they elevate user experiences and drive real
-                  results.
-                </Text>
-                <Text mt="lg">
-                  Curious by nature and driven by impact, I explore emerging
-                  tech in AI and cloud infrastructure to push products beyond
-                  the expected --whether through smarter automation,
-                  personalization, or rock-solid scalability. I thrive on
-                  turning complex challenges into intuitive, future-ready
-                  software that aligns perfectly with user and business goals.
-                </Text>
+              {mode === "web" ? (
+                <Box mt="xl">
+                  {/* About Section */}
+                  <Box id="about" component="section">
+                    <Text>
+                      I design and build digital products that make work
+                      simpler, smarter, and more enjoyable. With nearly four
+                      years of software engineering experience, I create
+                      solutions that elevate user experiences and drive real
+                      results.
+                    </Text>
+                    <Text mt="lg">
+                      Curious by nature and driven by impact, I explore emerging
+                      tech in AI and cloud infrastructure to push products
+                      beyond the expected outcomes through smarter automation,
+                      personalization, or rock-solid scalability.
+                    </Text>
 
-                <Flex my="sm" align="center" justify="space-between">
-                  <Text fw={500}>Certifications</Text>
-                  <ActionIcon
-                    onClick={() =>
-                      setCertificationsOpened(!certificationsOpened)
-                    }
-                    variant="light"
-                    color="cyan"
-                  >
-                    {certificationsOpened ? (
-                      <RiSubtractFill />
-                    ) : (
-                      <RiAddLargeLine />
+                    <Flex my="sm" align="center" justify="space-between"></Flex>
+
+                    <Grid>
+                      {certifications.map((cert, index) => (
+                        <Certification
+                          key={cert.title}
+                          order={index}
+                          {...cert}
+                        />
+                      ))}
+                    </Grid>
+                    <Flex my="sm" align="center" justify="flex-end">
+                      <BsFillPlusCircleFill
+                        cursor="pointer"
+                        size="1.4rem"
+                        onClick={() => setEducationOpened(!educationOpened)}
+                        color={educationOpened ? "gray" : "white"}
+                        style={{
+                          display: "inline-block",
+                          cursor: "pointer",
+                          transition: "transform .9s ease",
+                          transform: educationOpened
+                            ? "rotate(45deg)"
+                            : "rotate(360deg)",
+                        }}
+                      />
+                    </Flex>
+                    {educationOpened && (
+                      <Grid>
+                        {education.map((edu) => (
+                          <Education key={edu.title} {...edu} />
+                        ))}
+                      </Grid>
                     )}
-                  </ActionIcon>
-                </Flex>
-                {certificationsOpened && (
-                  <Grid>
-                    {certifications.map((cert: ICertificationProps) => {
-                      return <Certification key={cert.title} {...cert} />;
-                    })}
-                  </Grid>
-                )}
-                <Flex my="sm" align="center" justify="space-between">
-                  <Text mt="sm" fw={500}>
-                    Education
-                  </Text>
-                  <ActionIcon
-                    onClick={() => setEducationOpened(!educationOpened)}
-                    variant="light"
-                    color="cyan"
-                  >
-                    {educationOpened ? <RiSubtractFill /> : <RiAddLargeLine />}
-                  </ActionIcon>
-                </Flex>
-                {educationOpened && (
-                  <Grid>
-                    {education.map((edu: IEducationProps) => {
-                      return <Education key={edu.title} {...edu} />;
-                    })}
-                  </Grid>
-                )}
-              </Box>
-              <Box id="experience" component="section">
-                {work.map(({ company, jobs, link }) => (
-                  <Experience
-                    key={company}
-                    jobs={jobs}
-                    company={company}
-                    link={link}
-                  />
-                ))}
-                {/* <Title order={3}>Experience</Title> */}
-              </Box>
-              <Box id="projects" component="section">
-                <SegmentedControl
-                  radius="xl"
-                  size="sm"
-                  variant="filled"
-                  color="dark"
-                  data={[
-                    {
-                      value: "preview",
-                      label: (
-                        <Center style={{ gap: 10 }}>
-                          {/* <IconEye size={16} /> */}
-                          <span>Projects</span>
-                        </Center>
-                      ),
-                    },
-                    {
-                      value: "code",
-                      label: (
-                        <Center style={{ gap: 10 }}>
-                          {/* <IconCode size={16} /> */}
-                          <span>Archive</span>
-                        </Center>
-                      ),
-                    },
-                  ]}
-                />
-                <Text>Projects</Text>
-                {projects.map((project) => {
-                  return <Project key={project.name} {...project} />;
-                })}
-              </Box>
+                  </Box>
+
+                  {/* Experience Section */}
+                  <Box id="experience" component="section">
+                    {experience.map(({ company, jobs, link }) => (
+                      <Experience
+                        key={company}
+                        jobs={jobs}
+                        company={company}
+                        link={link}
+                      />
+                    ))}
+                  </Box>
+
+                  {/* Projects Section */}
+                  <Box id="projects" component="section">
+                    <Text>Projects</Text>
+                    {projects.map((project) => (
+                      <Project key={project.name} {...project} />
+                    ))}
+                  </Box>
+                </Box>
+              ) : (
+                <IntelligenceMenu />
+              )}
             </Grid.Col>
           </Grid>
         </Container>
 
+        <Affix
+          position={{ bottom: 20, left: "50%" }}
+          style={{ transform: "translateX(-50%)" }}
+        >
+          <IntelligenceMenu />
+          <TextInput
+            radius="xl"
+            onClick={() => setChatOpened((o) => !o)}
+            size="md"
+            placeholder="Ask anything about me"
+            leftSection={<SiOpenai />}
+            rightSection={<FaCircleArrowUp color="lime" />}
+            style={{
+              width: "100%",
+            }}
+          />
+        </Affix>
         <footer className={styles.footer}></footer>
       </MantineProvider>
     </>
