@@ -35,7 +35,7 @@ const Certification = ({
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.3, delay: order * 0.1 }}
       >
-        <Paper p="xs" h="100%" withBorder>
+        <Paper className="glassmorphism-container" p="xs" h="100%">
           {icon}
           <Flex h="100%" direction="column">
             <Text className="ai-text" size="sm" fw={500}>

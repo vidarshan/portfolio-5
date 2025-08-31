@@ -26,6 +26,12 @@ ul {
 body {
   color: var(--foreground);
   font-family: "Geist", sans-serif !important;
+  background: radial-gradient(circle at 20% 30%, rgba(0, 150, 255, 0.3), transparent 50%),
+              radial-gradient(circle at 80% 70%, rgba(255, 0, 200, 0.25), transparent 50%),
+              radial-gradient(circle at 50% 50%, rgba(0, 255, 150, 0.2), transparent 60%),
+              #0d0d15;
+  background-attachment: fixed;
+
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -48,23 +54,35 @@ body {
 }
 
 #transparent-input {
-  input {
-    background-color: rgba(66,66,69,0.9);
-    opacity: 0.95;
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-  }
-}
-
-.notification-card {
-  width: 350px;
-  padding: 16px;
   border-radius: 20px;
-  background: rgba(255, 255, 255, 0.15); /* semi-transparent */
+  background: rgba(255, 255, 255, 0.15);
   backdrop-filter: blur(20px) saturate(180%);
   -webkit-backdrop-filter: blur(20px) saturate(180%);
   border: 1px solid rgba(255, 255, 255, 0.25);
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25);
   color: #fff; /* text color */
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.4); /* subtle shadow to pop text */
+}
+
+/* placeholder style */
+#transparent-input::placeholder {
+  color: rgba(255, 255, 255, 0.7);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+}
+
+/* remove default focus outline and add glow similar to card depth */
+#transparent-input:focus {
+  outline: none;
+  border: 1px solid rgba(255, 255, 255, 0.35);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+}
+
+.glassmorphism-container{
+  background: rgba(255, 255, 255, 0.15) !important;
+  backdrop-filter: blur(20px) saturate(180%) !important;
+  -webkit-backdrop-filter: blur(20px) saturate(180%) !important;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.25) !important;
+  color: #fff !important;
+  border: 1px solid rgba(255, 255, 255, 0.35);
 }

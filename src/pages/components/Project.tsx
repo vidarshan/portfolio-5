@@ -15,7 +15,18 @@ const Project = ({
   demo,
 }: IProject) => {
   return (
-    <Card mt="lg" withBorder>
+    <Card
+      style={{
+        background: "rgba(255, 255, 255, 0.15)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        BoxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
+        color: "#fff",
+        border: "1px solid rgba(255, 255, 255, 0.35)",
+      }}
+      mt="lg"
+      withBorder
+    >
       <Flex>
         <Image src={image} alt={name} width={190} height={120} priority />
         <Flex direction="column">

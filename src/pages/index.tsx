@@ -6,15 +6,19 @@ import {
   Affix,
   Box,
   Button,
+  Card,
   Container,
+  Divider,
   Flex,
   Grid,
+  Group,
   List,
   MantineProvider,
   Modal,
   Popover,
   Text,
   TextInput,
+  ThemeIcon,
   Title,
   Transition,
 } from "@mantine/core";
@@ -42,8 +46,9 @@ import { FiMoon } from "react-icons/fi";
 import { useDisclosure } from "@mantine/hooks";
 import IntelligenceMenu from "./components/IntelligenceMenu";
 import OrbBackground from "./components/OrbBackground";
-import { FaCircleArrowUp } from "react-icons/fa6";
+import { FaCircleArrowUp, FaX } from "react-icons/fa6";
 import { SiOpenai } from "react-icons/si";
+import { IoClose } from "react-icons/io5";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -88,7 +93,6 @@ export default function Home() {
     "light"
   );
   const sections = ["about", "experience", "projects"];
-  const [mode, setMode] = useState("web");
   const [activeSection, setActiveSection] = useState("about");
   const [opened, { open, close }] = useDisclosure(true);
   const [educationOpened, setEducationOpened] = useState(false);
@@ -162,7 +166,7 @@ export default function Home() {
         theme={{
           ...theme,
         }}
-        defaultColorScheme="light"
+        defaultColorScheme="dark"
       >
         <Container size={1200}>
           <Grid>
@@ -216,7 +220,6 @@ export default function Home() {
                     </List>
                   </Box>
                 </Box>
-                <ModeSwitcher mode={mode} setMode={setMode} />
               </Flex>
             </Grid.Col>
 
@@ -225,7 +228,7 @@ export default function Home() {
               span={{ xs: 6, sm: 6, md: 6, lg: 7, xl: 7 }}
               component="main"
             >
-              {mode === "web" ? (
+              
                 <Box mt="xl">
                   {/* About Section */}
                   <Box id="about" component="section">
@@ -299,9 +302,9 @@ export default function Home() {
                     ))}
                   </Box>
                 </Box>
-              ) : (
-                <IntelligenceMenu />
-              )}
+             
+           
+          
             </Grid.Col>
           </Grid>
         </Container>
@@ -311,19 +314,8 @@ export default function Home() {
           style={{ transform: "translateX(-50%)" }}
         >
           <IntelligenceMenu />
-          <TextInput
-            radius="xl"
-            onClick={() => setChatOpened((o) => !o)}
-            size="md"
-            placeholder="Ask anything about me"
-            leftSection={<SiOpenai />}
-            rightSection={<FaCircleArrowUp color="lime" />}
-            style={{
-              width: "100%",
-            }}
-          />
         </Affix>
-        <footer className={styles.footer}></footer>
+        <Box component="footer" className={styles.footer} p="xl"></Box>
       </MantineProvider>
     </>
   );

@@ -7,6 +7,7 @@ import {
   Divider,
   Flex,
   Group,
+  Paper,
   Text,
   Title,
 } from "@mantine/core";
@@ -17,7 +18,19 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
   return (
-    <Card mt="1rem" p={20} withBorder>
+    <Paper
+      style={{
+        background: "rgba(255, 255, 255, 0.15)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        WebkitBackdropFilter: "blur(20px) saturate(180%)",
+        BoxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
+        color: "#fff",
+        border: "1px solid rgba(255, 255, 255, 0.35)",
+      }}
+      mt="1rem"
+      p={20}
+      withBorder
+    >
       <Group justify="space-between" align="center">
         <Text className="ai-text" size="lg" fw={500}>
           {company}
@@ -69,7 +82,7 @@ const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
           </Box>
         );
       })}
-    </Card>
+    </Paper>
   );
 };
 
