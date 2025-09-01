@@ -49,6 +49,7 @@ import OrbBackground from "./components/OrbBackground";
 import { FaCircleArrowUp, FaX } from "react-icons/fa6";
 import { SiOpenai } from "react-icons/si";
 import { IoClose } from "react-icons/io5";
+import Stats from "./components/Stats";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -221,6 +222,7 @@ export default function Home() {
                   </Box>
                 </Box>
               </Flex>
+              <Stats />
             </Grid.Col>
 
             {/* Right Main Content */}
@@ -228,83 +230,76 @@ export default function Home() {
               span={{ xs: 6, sm: 6, md: 6, lg: 7, xl: 7 }}
               component="main"
             >
-              
-                <Box mt="xl">
-                  {/* About Section */}
-                  <Box id="about" component="section">
-                    <Text>
-                      I design and build digital products that make work
-                      simpler, smarter, and more enjoyable. With nearly four
-                      years of software engineering experience, I create
-                      solutions that elevate user experiences and drive real
-                      results.
-                    </Text>
-                    <Text mt="lg">
-                      Curious by nature and driven by impact, I explore emerging
-                      tech in AI and cloud infrastructure to push products
-                      beyond the expected outcomes through smarter automation,
-                      personalization, or rock-solid scalability.
-                    </Text>
+              <Box mt="xl">
+                {/* About Section */}
+                <Box id="about" component="section">
+                  <Text>
+                    I design and build digital products that make work simpler,
+                    smarter, and more enjoyable. With nearly four years of
+                    software engineering experience, I create solutions that
+                    elevate user experiences and drive real results.
+                  </Text>
+                  <Text mt="lg">
+                    Curious by nature and driven by impact, I explore emerging
+                    tech in AI and cloud infrastructure to push products beyond
+                    the expected outcomes through smarter automation,
+                    personalization, or rock-solid scalability.
+                  </Text>
 
-                    <Flex my="sm" align="center" justify="space-between"></Flex>
-
+                  <Flex my="sm" align="center" justify="space-between"></Flex>
+                  <Title fw={400} order={4}>
+                    Certifications
+                  </Title>
+                  <Grid>
+                    {certifications.map((cert, index) => (
+                      <Certification key={cert.title} order={index} {...cert} />
+                    ))}
+                  </Grid>
+                  <Flex my="sm" align="center" justify="flex-end">
+                    <BsFillPlusCircleFill
+                      cursor="pointer"
+                      size="1.4rem"
+                      onClick={() => setEducationOpened(!educationOpened)}
+                      color={educationOpened ? "gray" : "white"}
+                      style={{
+                        display: "inline-block",
+                        cursor: "pointer",
+                        transition: "transform .9s ease",
+                        transform: educationOpened
+                          ? "rotate(45deg)"
+                          : "rotate(360deg)",
+                      }}
+                    />
+                  </Flex>
+                  {educationOpened && (
                     <Grid>
-                      {certifications.map((cert, index) => (
-                        <Certification
-                          key={cert.title}
-                          order={index}
-                          {...cert}
-                        />
+                      {education.map((edu) => (
+                        <Education key={edu.title} {...edu} />
                       ))}
                     </Grid>
-                    <Flex my="sm" align="center" justify="flex-end">
-                      <BsFillPlusCircleFill
-                        cursor="pointer"
-                        size="1.4rem"
-                        onClick={() => setEducationOpened(!educationOpened)}
-                        color={educationOpened ? "gray" : "white"}
-                        style={{
-                          display: "inline-block",
-                          cursor: "pointer",
-                          transition: "transform .9s ease",
-                          transform: educationOpened
-                            ? "rotate(45deg)"
-                            : "rotate(360deg)",
-                        }}
-                      />
-                    </Flex>
-                    {educationOpened && (
-                      <Grid>
-                        {education.map((edu) => (
-                          <Education key={edu.title} {...edu} />
-                        ))}
-                      </Grid>
-                    )}
-                  </Box>
-
-                  {/* Experience Section */}
-                  <Box id="experience" component="section">
-                    {experience.map(({ company, jobs, link }) => (
-                      <Experience
-                        key={company}
-                        jobs={jobs}
-                        company={company}
-                        link={link}
-                      />
-                    ))}
-                  </Box>
-
-                  {/* Projects Section */}
-                  <Box id="projects" component="section">
-                    <Text>Projects</Text>
-                    {projects.map((project) => (
-                      <Project key={project.name} {...project} />
-                    ))}
-                  </Box>
+                  )}
                 </Box>
-             
-           
-          
+
+                {/* Experience Section */}
+                <Box id="experience" component="section">
+                  {experience.map(({ company, jobs, link }) => (
+                    <Experience
+                      key={company}
+                      jobs={jobs}
+                      company={company}
+                      link={link}
+                    />
+                  ))}
+                </Box>
+
+                {/* Projects Section */}
+                <Box id="projects" component="section">
+                  <Text>Projects</Text>
+                  {projects.map((project) => (
+                    <Project key={project.name} {...project} />
+                  ))}
+                </Box>
+              </Box>
             </Grid.Col>
           </Grid>
         </Container>

@@ -38,10 +38,10 @@ const Certification = ({
         <Paper className="glassmorphism-container" p="xs" h="100%">
           {icon}
           <Flex h="100%" direction="column">
-            <Text className="ai-text" size="sm" fw={500}>
+            <Text size="sm" fw={500}>
               {organization} · {year}
             </Text>
-            <Text c="gray" style={{ lineHeight: 1.4 }} mt="sm" size="sm">
+            <Text c="gray" style={{ lineHeight: 1.4 }} mt="xs" size="sm">
               {title}
             </Text>
           </Flex>
