@@ -12,6 +12,8 @@ import {
 } from "@mantine/core";
 import React from "react";
 import { RiAppleFill, RiPlayFill, RiSpotifyFill } from "react-icons/ri";
+import LikedSongs from "./LikedSongs";
+import Songs from "./Songs";
 
 const Stats = () => {
   const uri1 = process.env.NEXT_PUBLIC_SPOTIFY_AUTH_CODE;
@@ -30,9 +32,7 @@ const Stats = () => {
 
   return (
     <Paper w="70%" mb="xs" className="glassmorphism-container" p="xs">
-      <Text size="sm" fw={600}>
-        Github Stats
-      </Text>
+      <Text size="sm">Github Stats</Text>
       <Progress.Root mt="xs" variant="light" size="lg">
         <Progress.Section value={4} color="cyan">
           <Progress.Label>2019</Progress.Label>
@@ -57,51 +57,7 @@ const Stats = () => {
         </Progress.Section>
       </Progress.Root>
       <Divider my="xs" />
-
-      <Flex justify="space-between" align="center">
-        <Text size="sm" fw={600}>
-          A song from my favorite playlist
-        </Text>
-        <SegmentedControl
-          size="sm"
-          data={[
-            {
-              value: "preview",
-              label: (
-                <Center style={{ gap: 10 }}>
-                  <RiAppleFill />
-                </Center>
-              ),
-            },
-            {
-              value: "code",
-              label: (
-                <Center style={{ gap: 10 }}>
-                  <RiSpotifyFill />
-                </Center>
-              ),
-            },
-          ]}
-        />
-      </Flex>
-      <Flex align="center">
-        <Image
-          radius="md"
-          w="3rem"
-          h="3rem"
-          fit="contain"
-          alt="album_art"
-          src="https://fastly.picsum.photos/id/81/200/200.jpg?hmac=dFNEVF-qbegjxydMvtTOtbJGZL9ofrpsTh6FA-FTtkI"
-        ></Image>
-        <Box ml="xs">
-          <Text size="sm" fw={600}>
-            I got 5 on it{" "}
-          </Text>
-          <Text size="xs" c="muted">
-            Some Artist · 1985
-          </Text>
-        </Box>
-      </Flex>
+      <Songs />
     </Paper>
   );
 };

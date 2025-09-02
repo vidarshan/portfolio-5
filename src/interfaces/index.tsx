@@ -38,7 +38,11 @@ export interface IProject {
   technologies: string[];
 }
 
-const userland = {
-  /* whatever you want to export as default */
-};
-export default userland;
+export interface ISong {
+  album: string;
+  artists: string;
+  image: string;
+  title: string;
+  url: string;
+  year: string;
+}
