@@ -1,6 +1,6 @@
 import { Card, Grid, Text } from "@mantine/core";
 import React from "react";
-import { IEducationProps } from "../interfaces";
+import { IEducationProps } from "../../interfaces";
 
 const Education = ({ title, description }: IEducationProps) => {
   return (

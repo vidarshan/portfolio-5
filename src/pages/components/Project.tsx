@@ -1,7 +1,7 @@
 import { ActionIcon, Badge, Box, Card, Flex, Group, Text } from "@mantine/core";
 import Image from "next/image";
 import React from "react";
-import { IProject } from "../interfaces";
+import { IProject } from "../../interfaces";
 import { FiArrowUpRight, FiGithub } from "react-icons/fi";
 import { RiGithubFill } from "react-icons/ri";
 
