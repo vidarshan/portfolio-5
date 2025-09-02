@@ -13,7 +13,7 @@ import {
 } from "@mantine/core";
 import { link } from "fs";
 import React from "react";
-import { IExperienceProps, IWork } from "../../interfaces";
+import { IExperienceProps, IWork } from "../interfaces";
 import { FiArrowUpRight } from "react-icons/fi";
 
 const Experience: React.FC<IWork> = ({ company, jobs, link }) => {

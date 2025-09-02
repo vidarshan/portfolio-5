@@ -24,15 +24,15 @@ import {
 } from "@mantine/core";
 import { RiAddLargeLine, RiSubtractFill, RiArrowUpLine } from "react-icons/ri";
 import { useEffect, useState } from "react";
-import Experience from "./components/Experience";
-import Education from "./components/Education";
-import Certification from "./components/Certification";
-import Project from "./components/Project";
-import Socials from "./components/Socials";
-import ModeSwitcher from "./components/ModeSwitcher";
+import Experience from "../components/Experience";
+import Education from "../components/Education";
+import Certification from "../components/Certification";
+import Project from "../components/Project";
+import Socials from "../components/Socials";
+import ModeSwitcher from "../components/ModeSwitcher";
 import { motion } from "framer-motion";
-import QuickQuestion from "./components/QuickQuestion";
-import Navigator from "./components/Navigator";
+import QuickQuestion from "../components/QuickQuestion";
+import Navigator from "../components/Navigator";
 import { ColorSchemeScript } from "@mantine/core";
 
 import experience from "@/data/work";
@@ -44,12 +44,12 @@ import styles from "@/styles/Home.module.css";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FiMoon } from "react-icons/fi";
 import { useDisclosure } from "@mantine/hooks";
-import IntelligenceMenu from "./components/IntelligenceMenu";
-import OrbBackground from "./components/OrbBackground";
+import IntelligenceMenu from "../components/IntelligenceMenu";
+import OrbBackground from "../components/OrbBackground";
 import { FaCircleArrowUp, FaX } from "react-icons/fa6";
 import { SiOpenai } from "react-icons/si";
 import { IoClose } from "react-icons/io5";
-import Stats from "./components/Stats";
+import Stats from "../components/Stats";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",

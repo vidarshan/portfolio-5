@@ -9,7 +9,7 @@ import {
   ThemeIcon,
 } from "@mantine/core";
 import React, { useEffect } from "react";
-import { ICertificationProps } from "../../interfaces";
+import { ICertificationProps } from "../interfaces";
 import { FiCheck, FiMinus } from "react-icons/fi";
 import { motion } from "framer-motion";
 import { PiSpinnerGapBold } from "react-icons/pi";
