@@ -169,9 +169,9 @@ export default function Home() {
         <link rel="icon" href="/favicon.ico" />
       </Head>
       <MantineProvider
-        theme={{
-          ...theme,
-        }}
+        // theme={{
+        //   ...theme,
+        // }}
         defaultColorScheme="dark"
       >
         <Container size={1200}>
