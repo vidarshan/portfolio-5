@@ -35,11 +35,11 @@ import QuickQuestion from "./components/QuickQuestion";
 import Navigator from "./components/Navigator";
 import { ColorSchemeScript } from "@mantine/core";
 
-import experience from "@/pages/data/work";
-import education from "@/pages/data/education";
-import certifications from "@/pages/data/certifications";
-import projects from "@/pages/data/projects";
-import questions from "@/pages/data/questions";
+import experience from "@/data/work";
+import education from "@/data/education";
+import certifications from "@/data/certifications";
+import projects from "@/data/projects";
+import questions from "@/data/questions";
 import styles from "@/styles/Home.module.css";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FiMoon } from "react-icons/fi";
