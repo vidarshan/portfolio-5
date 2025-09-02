@@ -1,5 +1,6 @@
 import {
   ActionIcon,
+  Box,
   Center,
   Divider,
   Flex,
@@ -13,10 +14,24 @@ import React from "react";
 import { RiAppleFill, RiPlayFill, RiSpotifyFill } from "react-icons/ri";
 
 const Stats = () => {
+  const uri1 = process.env.NEXT_PUBLIC_SPOTIFY_AUTH_CODE;
+  console.log(uri1);
+
+  const scopes = [
+    "user-library-read", // read liked songs
+  ].join(" ");
+
+  const authUrl = `https://accounts.spotify.com/authorize?client_id=${
+    process.env.SPOTIFY_CLIENT_ID
+  }&response_type=code&redirect_uri=${encodeURIComponent(
+    process.env.SPOTIFY_REDIRECT_URI
+  )}&scope=${encodeURIComponent(scopes)}`;
+  console.log(authUrl);
+
   return (
     <Paper w="70%" mb="xs" className="glassmorphism-container" p="xs">
       <Text size="sm" fw={600}>
-        Github Statistics
+        Github Stats
       </Text>
       <Progress.Root mt="xs" variant="light" size="lg">
         <Progress.Section value={4} color="cyan">
@@ -45,7 +60,7 @@ const Stats = () => {
 
       <Flex justify="space-between" align="center">
         <Text size="sm" fw={600}>
-          My favorite playlist
+          A song from my favorite playlist
         </Text>
         <SegmentedControl
           size="sm"
@@ -69,9 +84,24 @@ const Stats = () => {
           ]}
         />
       </Flex>
-      <Image></Image>
-      <Text>I got 5 on it </Text>
-      <Text>Some Artist · 1985</Text>
+      <Flex align="center">
+        <Image
+          radius="md"
+          w="3rem"
+          h="3rem"
+          fit="contain"
+          alt="album_art"
+          src="https://fastly.picsum.photos/id/81/200/200.jpg?hmac=dFNEVF-qbegjxydMvtTOtbJGZL9ofrpsTh6FA-FTtkI"
+        ></Image>
+        <Box ml="xs">
+          <Text size="sm" fw={600}>
+            I got 5 on it{" "}
+          </Text>
+          <Text size="xs" c="muted">
+            Some Artist · 1985
+          </Text>
+        </Box>
+      </Flex>
     </Paper>
   );
 };
