@@ -8,13 +8,16 @@
     "start": "next start",
     "lint": "next lint"
   },
+  "type": "module",
   "dependencies": {
     "@mantine/core": "^8.2.4",
     "@mantine/hooks": "^8.2.4",
     "@react-three/drei": "^10.7.4",
     "@react-three/fiber": "^9.3.0",
+    "btoa": "^1.2.1",
     "motion": "^12.23.12",
     "next": "15.4.6",
+    "node-fetch": "^3.3.2",
     "openai": "^5.13.1",
     "react": "19.1.0",
     "react-dom": "19.1.0",
@@ -22,7 +25,8 @@
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3",
-    "@types/node": "^20",
+    "@types/btoa": "^1.2.5",
+    "@types/node": "^20.19.11",
     "@types/react": "^19",
     "@types/react-dom": "^19",
     "eslint": "^9",
@@ -30,6 +34,7 @@
     "postcss": "^8.5.6",
     "postcss-preset-mantine": "^1.18.0",
     "postcss-simple-vars": "^7.0.1",
-    "typescript": "^5"
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
   }
 }

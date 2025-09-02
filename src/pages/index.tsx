@@ -179,7 +179,7 @@ export default function Home() {
               pos="sticky"
               h="100vh"
             >
-              <Flex mt="xl" h="80%" direction="column" justify="space-between">
+              <Flex h="80%" direction="column" justify="space-between">
                 <Box>
                   <Text className="ai-text" c="#74c0fc" size="2.4rem" fw={400}>
                     Vidarshan
@@ -310,7 +310,7 @@ export default function Home() {
         >
           <IntelligenceMenu />
         </Affix>
-        <Box component="footer" className={styles.footer} p="xl"></Box>
+       
       </MantineProvider>
     </>
   );
