@@ -17,16 +17,16 @@ const Stats = () => {
   const uri1 = process.env.NEXT_PUBLIC_SPOTIFY_AUTH_CODE;
   console.log(uri1);
 
-  const scopes = [
-    "user-library-read", // read liked songs
-  ].join(" ");
+  // const scopes = [
+  //   "user-library-read", // read liked songs
+  // ].join(" ");
 
-  const authUrl = `https://accounts.spotify.com/authorize?client_id=${
-    process.env.SPOTIFY_CLIENT_ID
-  }&response_type=code&redirect_uri=${encodeURIComponent(
-    process.env.SPOTIFY_REDIRECT_URI
-  )}&scope=${encodeURIComponent(scopes)}`;
-  console.log(authUrl);
+  // const authUrl = `https://accounts.spotify.com/authorize?client_id=${
+  //   process.env.SPOTIFY_CLIENT_ID
+  // }&response_type=code&redirect_uri=${encodeURIComponent(
+  //   process.env.SPOTIFY_REDIRECT_URI
+  // )}&scope=${encodeURIComponent(scopes)}`;
+  // console.log(authUrl);
 
   return (
     <Paper w="70%" mb="xs" className="glassmorphism-container" p="xs">
