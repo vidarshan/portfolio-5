@@ -37,3 +37,8 @@ export interface IProject {
   year: string;
   technologies: string[];
 }
+
+const userland = {
+  /* whatever you want to export as default */
+};
+export default userland;
