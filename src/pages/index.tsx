@@ -65,16 +65,21 @@ export default function Home() {
   const theme = {
     colors: {
       dark: [
-        "#e8e8e8",
-        "#f7f7f7",
-        "#ffffff",
-        "#aaaaaa",
-        "#323232",
-        "#2e2e2e",
-        "#000000",
-        "#000000",
-        "#161616",
-        "#d80073",
+        "#e8e8e8", // 0
+        "#f7f7f7", // 1
+        "#ffffff", // 2
+        "#aaaaaa", // 3
+        "#323232", // 4
+        "#2e2e2e", // 5
+        "#000000", // 6
+        "#000000", // 7
+        "#161616", // 8
+        "#d80073", // 9
+        "#b4005a", // 10 - extra to ensure minimum required length
+        "#a0004e", // 11
+        "#8c0042", // 12
+        "#780036", // 13
+        "#64002a", // 14
       ],
     },
     defaultRadius: "lg",
@@ -310,7 +315,6 @@ export default function Home() {
         >
           <IntelligenceMenu />
         </Affix>
-       
       </MantineProvider>
     </>
   );
