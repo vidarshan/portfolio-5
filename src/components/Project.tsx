@@ -16,14 +16,7 @@ const Project = ({
 }: IProject) => {
   return (
     <Card
-      style={{
-        background: "rgba(255, 255, 255, 0.15)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
-        BoxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
-        color: "#fff",
-        border: "1px solid rgba(255, 255, 255, 0.35)",
-      }}
+      className="glassmorphism-container"
       mt="lg"
       withBorder
     >

@@ -5,8 +5,8 @@ import { IEducationProps } from "../interfaces";
 const Education = ({ title, description }: IEducationProps) => {
   return (
     <Grid.Col span={{ xs: 3, sm: 3, md: 6, lg: 6, xl: 6 }}>
-      <Card h="100%" withBorder>
-        <Text className="ai-text" size="sm" fw={500} c="teal">
+      <Card className="glassmorphism-container" h="100%" >
+        <Text size="sm" fw={500}>
           {title}
         </Text>
         <Text c="gray" style={{ lineHeight: 1.8 }} mt="sm" size="sm">

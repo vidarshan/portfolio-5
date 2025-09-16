@@ -181,6 +181,7 @@ const IntelligenceMenu = () => {
             WebkitBackdropFilter: "blur(20px) saturate(180%)",
             boxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
             color: "#fff",
+            borderRadius: 30,
           }}
           id="transparent-input"
           placeholder="Ask ChatGPT"

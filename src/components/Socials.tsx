@@ -1,11 +1,13 @@
 import {
   ActionIcon,
   Box,
+  Center,
   Divider,
   Flex,
   Group,
   Paper,
   Text,
+  Tooltip,
 } from "@mantine/core";
 import React from "react";
 import {
@@ -19,58 +21,79 @@ import {
   RiTwitterXFill,
   RiTwitterXLine,
 } from "react-icons/ri";
+import { linkedInLink, githubLink, stackoverflowLink } from "@/data/links";
 
 const Socials = () => {
   return (
     <Group mt="md">
-      <Paper className="glassmorphism-container" w="fit-content" p="0.3rem">
-        <Group>
-          <ActionIcon
-            size="md"
+      <Group>
+        <Tooltip
+          events={{ hover: true, focus: true, touch: false }}
+          label="View Github Profile"
+          position="bottom"
+          withArrow
+        >
+          <Box
             className="glassmorphism-container"
-            variant="light"
+            p="xs"
+            component="a"
+            href={githubLink}
+            target="_blank"
           >
-            <RiGithubLine />
-          </ActionIcon>
-          <ActionIcon
-            size="md"
+            <Center>
+              <RiGithubLine />
+            </Center>
+          </Box>
+        </Tooltip>
+        <Tooltip
+          events={{ hover: true, focus: true, touch: false }}
+          label="View Stackoverflow Profile"
+          position="bottom"
+          withArrow
+        >
+          <Box
             className="glassmorphism-container"
-            variant="light"
+            p="xs"
+            component="a"
+            href={stackoverflowLink}
+            target="_blank"
           >
-            <RiStackOverflowLine />
-          </ActionIcon>
-          <ActionIcon
-            size="md"
+            <Center>
+              <RiStackOverflowLine />
+            </Center>
+          </Box>
+        </Tooltip>
+        <Tooltip
+          events={{ hover: true, focus: true, touch: false }}
+          label="View LinkedIn Profile"
+          position="bottom"
+          withArrow
+        >
+          <Box
             className="glassmorphism-container"
-            variant="light"
+            p="xs"
+            component="a"
+            href={linkedInLink}
+            target="_blank"
           >
-            <RiLinkedinBoxFill />
-          </ActionIcon>
-          <ActionIcon
-            size="md"
-            className="glassmorphism-container"
-            variant="light"
-          >
-            <RiTwitterXLine />
-          </ActionIcon>
-        </Group>
-      </Paper>
-      <Paper
-        className="glassmorphism-container"
-        w="fit-content"
-        bdrs="inherit"
-        p="0.3rem"
+            <Center>
+              <RiLinkedinBoxFill />
+            </Center>
+          </Box>
+        </Tooltip>
+      </Group>
+      <Tooltip
+        events={{ hover: true, focus: true, touch: false }}
+        label="Download Resume"
+        position="bottom"
+        withArrow
       >
-        <Group>
-          <ActionIcon
-            size="md"
-            className="glassmorphism-container"
-            variant="light"
-          >
+        <Box className="glassmorphism-container" p="xs">
+          <Center>
             <RiDownloadLine />
-          </ActionIcon>
-        </Group>
-      </Paper>
+          </Center>
+        </Box>
+      </Tooltip>
     </Group>
   );
 };

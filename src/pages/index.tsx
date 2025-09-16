@@ -4,6 +4,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import {
   ActionIcon,
   Affix,
+  Badge,
   Box,
   Button,
   Card,
@@ -22,7 +23,14 @@ import {
   Title,
   Transition,
 } from "@mantine/core";
-import { RiAddLargeLine, RiSubtractFill, RiArrowUpLine } from "react-icons/ri";
+import {
+  RiAddLargeLine,
+  RiSubtractFill,
+  RiArrowUpLine,
+  RiArrowDownLine,
+  RiStackedView,
+  RiAddLargeFill,
+} from "react-icons/ri";
 import { useEffect, useState } from "react";
 import Experience from "../components/Experience";
 import Education from "../components/Education";
@@ -50,6 +58,9 @@ import { FaCircleArrowUp, FaX } from "react-icons/fa6";
 import { SiOpenai } from "react-icons/si";
 import { IoClose } from "react-icons/io5";
 import Stats from "../components/Stats";
+import CustomBadge from "@/components/CustomBadge";
+import { technicalCompetencies, technologies, frameworks } from "@/data/about";
+import Expand from "@/components/Expand";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -103,6 +114,7 @@ export default function Home() {
   const [opened, { open, close }] = useDisclosure(true);
   const [educationOpened, setEducationOpened] = useState(false);
   const [certificationsOpened, setCertificationsOpened] = useState(false);
+  const [showStack, setShowStack] = useState(false);
 
   const [messages, setMessages] = useState([
     { sender: "bot", text: "Hi! How can I help you today?" },
@@ -168,14 +180,9 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MantineProvider
-        // theme={{
-        //   ...theme,
-        // }}
-        defaultColorScheme="dark"
-      >
+      <MantineProvider theme={theme} defaultColorScheme="dark">
         <Container size={1200}>
-          <Grid>
+          <Grid mt="xl">
             {/* Left Sidebar */}
             <Grid.Col
               component="header"
@@ -184,7 +191,7 @@ export default function Home() {
               pos="sticky"
               h="100vh"
             >
-              <Flex h="80%" direction="column" justify="space-between">
+              <Flex justify="space-between" h="100%" direction="column">
                 <Box>
                   <Text className="ai-text" c="#74c0fc" size="2.4rem" fw={400}>
                     Vidarshan
@@ -193,41 +200,59 @@ export default function Home() {
                     Software Engineer — Web, Mobile, AI & Cloud
                   </Title>
                   <Socials />
-                  <Box mt="4rem" component="nav">
-                    <List>
-                      <List.Item
-                        className={activeSection === "about" ? "ai-text" : ""}
-                        style={{ fontSize: "1.2rem" }}
-                        mb="0.3rem"
-                        fw={500}
+
+                  <Flex direction="column">
+                    <Box mt="4rem" component="nav">
+                      <Box
+                        p="0.6rem"
+                        w="70%"
+                        mb="xs"
+                        component="a"
+                        href="#about"
+                        style={{ textDecoration: "none", display: "block" }}
+                        className={
+                          activeSection === "about"
+                            ? "glassmorphism-container"
+                            : "glassmorphism-container-inactive"
+                        }
                       >
                         About
-                      </List.Item>
-                      <List.Item
+                      </Box>
+                      <Box
+                        p="xs"
+                        w="70%"
+                        mb="xs"
+                        component="a"
+                        href="#experience"
+                        style={{ textDecoration: "none", display: "block" }}
                         className={
-                          activeSection === "experience" ? "ai-text" : ""
+                          activeSection === "experience"
+                            ? "glassmorphism-container"
+                            : "glassmorphism-container-inactive"
                         }
-                        style={{ fontSize: "1.2rem" }}
-                        mb="0.3rem"
-                        fw={500}
                       >
                         Experience
-                      </List.Item>
-                      <List.Item
+                      </Box>
+                      <Box
+                        p="xs"
+                        w="70%"
+                        mb="xs"
+                        component="a"
+                        href="#projects"
+                        style={{ textDecoration: "none", display: "block" }}
                         className={
-                          activeSection === "projects" ? "ai-text" : ""
+                          activeSection === "projects"
+                            ? "glassmorphism-container"
+                            : "glassmorphism-container-inactive"
                         }
-                        style={{ fontSize: "1.2rem" }}
-                        mb="0.3rem"
-                        fw={500}
                       >
                         Projects
-                      </List.Item>
-                    </List>
-                  </Box>
+                      </Box>
+                    </Box>
+                  </Flex>
                 </Box>
+                <Stats />
               </Flex>
-              <Stats />
             </Grid.Col>
 
             {/* Right Main Content */}
@@ -235,7 +260,7 @@ export default function Home() {
               span={{ xs: 6, sm: 6, md: 6, lg: 7, xl: 7 }}
               component="main"
             >
-              <Box mt="xl">
+              <Box>
                 {/* About Section */}
                 <Box id="about" component="section">
                   <Text>
@@ -250,41 +275,92 @@ export default function Home() {
                     the expected outcomes through smarter automation,
                     personalization, or rock-solid scalability.
                   </Text>
+                  <Group mt="lg" mb="xs" justify="space-between">
+                    <Text size="sm" c="gray" fw={500}>
+                      Tech Stack
+                    </Text>
+                    <Expand
+                      opened={educationOpened}
+                      setOpened={setEducationOpened}
+                    />
+                  </Group>
+                  <Group gap="xs">
+                    {technicalCompetencies.map((comp, index) => {
+                      return (
+                        <CustomBadge
+                          key={comp.name}
+                          title={comp.name}
+                          order={index}
+                        />
+                      );
+                    })}
+                    <ActionIcon onClick={() => setShowStack(!showStack)}>
+                      <RiAddLargeFill />
+                    </ActionIcon>
+                  </Group>
+                  {showStack && (
+                    <Box mt="xs">
+                      <Divider labelPosition="left" label="Technologies" />
+                      <Group gap="xs">
+                        {technologies.map((comp, index) => {
+                          return (
+                            <CustomBadge
+                              key={comp.name}
+                              title={comp.name}
+                              order={index}
+                            />
+                          );
+                        })}
+                      </Group>
+                      <Divider
+                        mt="xs"
+                        labelPosition="left"
+                        label="Frameworks"
+                      />
+                      <Group gap="xs">
+                        {frameworks.map((comp, index) => {
+                          return (
+                            <CustomBadge
+                              key={comp.name}
+                              title={comp.name}
+                              order={index}
+                            />
+                          );
+                        })}
+                      </Group>
+                    </Box>
+                  )}
 
-                  <Flex my="sm" align="center" justify="space-between"></Flex>
-                  <Title fw={400} order={4}>
-                    Certifications
-                  </Title>
+                  <Group mt="lg" mb="xs" justify="space-between" align="center">
+                    <Text size="sm" c="gray" fw={500}>
+                      Certifications
+                    </Text>
+                    <Expand
+                      opened={educationOpened}
+                      setOpened={setEducationOpened}
+                    />
+                  </Group>
                   <Grid>
                     {certifications.map((cert, index) => (
                       <Certification key={cert.title} order={index} {...cert} />
                     ))}
                   </Grid>
-                  <Flex my="sm" align="center" justify="flex-end">
-                    <BsFillPlusCircleFill
-                      cursor="pointer"
-                      size="1.4rem"
-                      onClick={() => setEducationOpened(!educationOpened)}
-                      color={educationOpened ? "gray" : "white"}
-                      style={{
-                        display: "inline-block",
-                        cursor: "pointer",
-                        transition: "transform .9s ease",
-                        transform: educationOpened
-                          ? "rotate(45deg)"
-                          : "rotate(360deg)",
-                      }}
+                  <Group mt="lg" mb="xs" justify="space-between" align="center">
+                    <Text size="sm" c="gray" fw={500}>
+                      Academia
+                    </Text>
+                    <Expand
+                      opened={educationOpened}
+                      setOpened={setEducationOpened}
                     />
-                  </Flex>
-                  {educationOpened && (
-                    <Grid>
-                      {education.map((edu) => (
-                        <Education key={edu.title} {...edu} />
-                      ))}
-                    </Grid>
-                  )}
+                  </Group>
+                  <Grid>
+                    {education.map((edu) => (
+                      <Education key={edu.title} {...edu} />
+                    ))}
+                  </Grid>
                 </Box>
-
+                <Title>Experience</Title>
                 {/* Experience Section */}
                 <Box id="experience" component="section">
                   {experience.map(({ company, jobs, link }) => (
@@ -296,10 +372,9 @@ export default function Home() {
                     />
                   ))}
                 </Box>
-
+                <Text>Projects</Text>
                 {/* Projects Section */}
                 <Box id="projects" component="section">
-                  <Text>Projects</Text>
                   {projects.map((project) => (
                     <Project key={project.name} {...project} />
                   ))}
@@ -311,7 +386,9 @@ export default function Home() {
 
         <Affix
           position={{ bottom: 20, left: "50%" }}
-          style={{ transform: "translateX(-50%)" }}
+          style={{
+            transform: "translateX(-50%)",
+          }}
         >
           <IntelligenceMenu />
         </Affix>

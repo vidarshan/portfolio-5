@@ -7,7 +7,7 @@ const Songs = () => {
   const [song, setSong] = useState<ISong>({
     album: "",
     artists: "",
-    image: "",
+    image: "https://picsum.photos/200",
     title: "",
     url: "",
     year: "",
@@ -18,13 +18,16 @@ const Songs = () => {
       .then((res) => res.json())
       .then((data) => setSong(data));
   }, []);
-  console.log(song);
+
   return (
-    <Box className="no-link-style" component="a" href={song.url}>
+    <Box
+      className="no-link-style"
+      target="_blank"
+      component="a"
+      href={song.url}
+    >
       <Flex justify="space-between" align="center">
-        <Text size="sm" >
-          A song from my favorite playlist
-        </Text>
+        <Text size="sm">A song from my favorite playlist</Text>
         <RiSpotifyFill />
       </Flex>
       <Flex mt="xs" align="center">
