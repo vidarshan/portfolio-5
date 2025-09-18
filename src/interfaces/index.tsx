@@ -1,6 +1,7 @@
 import { JSX } from "react";
 
 export interface IEducationProps {
+  key: number;
   title: string;
   description: string;
 }

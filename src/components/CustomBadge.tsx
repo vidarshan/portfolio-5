@@ -24,18 +24,22 @@ const CustomBadge: React.FC<CustomBadgeProps> = ({
   onClick,
 }) => {
   return (
-    <>
+    <motion.span
+      initial={{ opacity: 0, y: 20 }}
+      animate={{ opacity: 1, y: 0 }}
+      transition={{ duration: 0.3, delay: order * 0.1 }}
+    >
       <Box
         style={{ cursor: cursor }}
         onClick={onClick}
-        p="xs"
+        p="0.4rem 0.4rem"
         className="glassmorphism-container"
       >
-        <Text c="gray" style={{ lineHeight: 1.8 }} size="sm">
+        <Text c="gray" size="sm">
           {title}
         </Text>
       </Box>
-    </>
+    </motion.span>
   );
 };
 

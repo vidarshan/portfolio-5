@@ -18,17 +18,7 @@ import { FiArrowUpRight } from "react-icons/fi";
 
 const Experience: React.FC<IWork> = ({ company, jobs, link }) => {
   return (
-    <Paper
-      style={{
-        background: "rgba(255, 255, 255, 0.15)",
-        backdropFilter: "blur(20px) saturate(180%)",
-        WebkitBackdropFilter: "blur(20px) saturate(180%)",
-        BoxShadow: "0 8px 24px rgba(0, 0, 0, 0.25)",
-        color: "#fff",
-      }}
-      mt="1rem"
-      p={20}
-    >
+    <Paper className="glassmorphism-container" mt="1rem" p={20}>
       <Group justify="space-between" align="center">
         <Text className="ai-text" size="lg" fw={500}>
           {company}

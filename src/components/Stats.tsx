@@ -12,13 +12,17 @@ import {
   SegmentedControl,
   Text,
 } from "@mantine/core";
-import React from "react";
+import React, { FC } from "react";
 import { RiAppleFill, RiPlayFill, RiSpotifyFill } from "react-icons/ri";
 import LikedSongs from "./LikedSongs";
 import Songs from "./Songs";
 import Github from "./Github";
 
-const Stats = () => {
+interface StatsProps {
+  width: number;
+}
+
+const Stats: FC<StatsProps> = ({ width }) => {
   const uri1 = process.env.NEXT_PUBLIC_SPOTIFY_AUTH_CODE;
   console.log(uri1);
 
@@ -37,7 +41,12 @@ const Stats = () => {
   // console.log(authUrl);
 
   return (
-    <Paper w="70%" mb="xl" className="glassmorphism-container" p="xs">
+    <Paper
+      w={width > 767 ? "70%" : "100%"}
+      mb="xl"
+      className="glassmorphism-container"
+      p="xs"
+    >
       <Github />
       <Divider my="xs" />
       <Songs />

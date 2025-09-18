@@ -40,7 +40,15 @@ const Songs = () => {
           src={song.image}
         ></Image>
         <Box ml="xs">
-          <Text size="sm" fw={600}>
+          <Text
+            style={{
+              whiteSpace: "nowrap",
+              overflow: "hidden",
+              textOverflow: "ellipsis",
+            }}
+            size="sm"
+            fw={600}
+          >
             {song.title}
           </Text>
           <Text size="xs" c="muted">

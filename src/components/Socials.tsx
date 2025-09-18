@@ -6,6 +6,7 @@ import {
   Flex,
   Group,
   Paper,
+  SegmentedControl,
   Text,
   Tooltip,
 } from "@mantine/core";
@@ -22,6 +23,7 @@ import {
   RiTwitterXLine,
 } from "react-icons/ri";
 import { linkedInLink, githubLink, stackoverflowLink } from "@/data/links";
+import { FaMasksTheater, FaTerminal } from "react-icons/fa6";
 
 const Socials = () => {
   return (
@@ -94,6 +96,7 @@ const Socials = () => {
           </Center>
         </Box>
       </Tooltip>
+      
     </Group>
   );
 };

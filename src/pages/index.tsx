@@ -17,6 +17,7 @@ import {
   MantineProvider,
   Modal,
   Popover,
+  SegmentedControl,
   Text,
   TextInput,
   ThemeIcon,
@@ -38,7 +39,7 @@ import Certification from "../components/Certification";
 import Project from "../components/Project";
 import Socials from "../components/Socials";
 import ModeSwitcher from "../components/ModeSwitcher";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
 import QuickQuestion from "../components/QuickQuestion";
 import Navigator from "../components/Navigator";
 import { ColorSchemeScript } from "@mantine/core";
@@ -51,7 +52,11 @@ import questions from "@/data/questions";
 import styles from "@/styles/Home.module.css";
 import { BsFillPlusCircleFill } from "react-icons/bs";
 import { FiMoon } from "react-icons/fi";
-import { useDisclosure } from "@mantine/hooks";
+import {
+  useDisclosure,
+  useViewportSize,
+  useWindowScroll,
+} from "@mantine/hooks";
 import IntelligenceMenu from "../components/IntelligenceMenu";
 import OrbBackground from "../components/OrbBackground";
 import { FaCircleArrowUp, FaX } from "react-icons/fa6";
@@ -61,6 +66,7 @@ import Stats from "../components/Stats";
 import CustomBadge from "@/components/CustomBadge";
 import { technicalCompetencies, technologies, frameworks } from "@/data/about";
 import Expand from "@/components/Expand";
+import { ReduxProvider } from "@/store/Providers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -114,7 +120,9 @@ export default function Home() {
   const [opened, { open, close }] = useDisclosure(true);
   const [educationOpened, setEducationOpened] = useState(false);
   const [certificationsOpened, setCertificationsOpened] = useState(false);
-  const [showStack, setShowStack] = useState(false);
+  const [stackOpened, setStackOpened] = useState(true);
+  const [showMoreStackOpened, setShowMoreStackOpened] = useState(false);
+  const { height, width } = useViewportSize();
 
   const [messages, setMessages] = useState([
     { sender: "bot", text: "Hi! How can I help you today?" },
@@ -180,219 +188,315 @@ export default function Home() {
         <meta name="viewport" content="width=device-width, initial-scale=1" />
         <link rel="icon" href="/favicon.ico" />
       </Head>
-      <MantineProvider theme={theme} defaultColorScheme="dark">
-        <Container size={1200}>
-          <Grid mt="xl">
-            {/* Left Sidebar */}
-            <Grid.Col
-              component="header"
-              span={{ xs: 6, sm: 6, md: 6, lg: 5, xl: 5 }}
-              top={0}
-              pos="sticky"
-              h="100vh"
-            >
-              <Flex justify="space-between" h="100%" direction="column">
+      <ReduxProvider>
+        <MantineProvider theme={theme} defaultColorScheme="dark">
+          <Container size={1200}>
+            <Grid mt="xl">
+              {/* Left Sidebar */}
+              <Grid.Col
+                component="header"
+                span={{ xs: 12, sm: 4, md: 5, lg: 5, xl: 5 }}
+                top={0}
+                pos={width > 767 ? "sticky" : "unset"}
+                h={width > 767 ? "100vh" : "40vh"}
+              >
+                <Flex justify="space-between" h="100%" direction="column">
+                  <Box>
+                    {/* <SegmentedControl  className="glassmorphism-container" data={["retro", "modern"]} /> */}
+                    {/* <Text>{scroll.y}</Text> */}
+                    <Text
+                      className="ai-text"
+                      c="#74c0fc"
+                      size="2.4rem"
+                      fw={400}
+                    >
+                      Vidarshan
+                    </Text>
+                    <Title mt="sm" c="gray" size="1.2rem" fw={400}>
+                      Software Engineer — Web, Mobile, AI & Cloud
+                    </Title>
+                    <Socials />
+                    {width > 767 ? (
+                      <Flex direction="column">
+                        <Box mt="4rem" component="nav">
+                          <Box
+                            py="xs"
+                            w="70%"
+                            component="a"
+                            href="#about"
+                            style={{ textDecoration: "none", display: "block" }}
+                          >
+                            About
+                          </Box>
+                          <Box
+                            py="xs"
+                            w="70%"
+                            component="a"
+                            href="#experience"
+                            style={{ textDecoration: "none", display: "block" }}
+                          >
+                            Experience
+                          </Box>
+                          <Box
+                            py="xs"
+                            w="70%"
+                            mb="xs"
+                            component="a"
+                            href="#projects"
+                            style={{ textDecoration: "none", display: "block" }}
+                          >
+                            Projects
+                          </Box>
+                        </Box>
+                      </Flex>
+                    ) : (
+                      <></>
+                    )}
+                  </Box>
+                  <Stats width={width} />
+                </Flex>
+              </Grid.Col>
+
+              {/* Right Main Content */}
+              <Grid.Col
+                span={{ xs: 12, sm: 8, md: 7, lg: 7, xl: 7 }}
+                component="main"
+              >
                 <Box>
-                  <Text className="ai-text" c="#74c0fc" size="2.4rem" fw={400}>
-                    Vidarshan
-                  </Text>
-                  <Title mt="sm" c="gray" size="1.2rem" fw={400}>
-                    Software Engineer — Web, Mobile, AI & Cloud
-                  </Title>
-                  <Socials />
-
-                  <Flex direction="column">
-                    <Box mt="4rem" component="nav">
-                      <Box
-                        p="0.6rem"
-                        w="70%"
-                        mb="xs"
-                        component="a"
-                        href="#about"
-                        style={{ textDecoration: "none", display: "block" }}
-                        className={
-                          activeSection === "about"
-                            ? "glassmorphism-container"
-                            : "glassmorphism-container-inactive"
-                        }
-                      >
-                        About
-                      </Box>
-                      <Box
-                        p="xs"
-                        w="70%"
-                        mb="xs"
-                        component="a"
-                        href="#experience"
-                        style={{ textDecoration: "none", display: "block" }}
-                        className={
-                          activeSection === "experience"
-                            ? "glassmorphism-container"
-                            : "glassmorphism-container-inactive"
-                        }
-                      >
-                        Experience
-                      </Box>
-                      <Box
-                        p="xs"
-                        w="70%"
-                        mb="xs"
-                        component="a"
-                        href="#projects"
-                        style={{ textDecoration: "none", display: "block" }}
-                        className={
-                          activeSection === "projects"
-                            ? "glassmorphism-container"
-                            : "glassmorphism-container-inactive"
-                        }
-                      >
-                        Projects
-                      </Box>
-                    </Box>
-                  </Flex>
-                </Box>
-                <Stats />
-              </Flex>
-            </Grid.Col>
-
-            {/* Right Main Content */}
-            <Grid.Col
-              span={{ xs: 6, sm: 6, md: 6, lg: 7, xl: 7 }}
-              component="main"
-            >
-              <Box>
-                {/* About Section */}
-                <Box id="about" component="section">
-                  <Text>
-                    I design and build digital products that make work simpler,
-                    smarter, and more enjoyable. With nearly four years of
-                    software engineering experience, I create solutions that
-                    elevate user experiences and drive real results.
-                  </Text>
-                  <Text mt="lg">
-                    Curious by nature and driven by impact, I explore emerging
-                    tech in AI and cloud infrastructure to push products beyond
-                    the expected outcomes through smarter automation,
-                    personalization, or rock-solid scalability.
-                  </Text>
-                  <Group mt="lg" mb="xs" justify="space-between">
-                    <Text size="sm" c="gray" fw={500}>
-                      Tech Stack
+                  {/* About Section */}
+                  <Box id="about" component="section">
+                    <Text size="sm" style={{ lineHeight: "2rem" }}>
+                      I design and build digital products that make work
+                      simpler, smarter, and more enjoyable. With nearly four
+                      years of software engineering experience, I create
+                      solutions that elevate user experiences and drive real
+                      results.
                     </Text>
-                    <Expand
-                      opened={educationOpened}
-                      setOpened={setEducationOpened}
-                    />
-                  </Group>
-                  <Group gap="xs">
-                    {technicalCompetencies.map((comp, index) => {
-                      return (
-                        <CustomBadge
-                          key={comp.name}
-                          title={comp.name}
-                          order={index}
-                        />
-                      );
-                    })}
-                    <ActionIcon onClick={() => setShowStack(!showStack)}>
-                      <RiAddLargeFill />
-                    </ActionIcon>
-                  </Group>
-                  {showStack && (
-                    <Box mt="xs">
-                      <Divider labelPosition="left" label="Technologies" />
-                      <Group gap="xs">
-                        {technologies.map((comp, index) => {
-                          return (
-                            <CustomBadge
-                              key={comp.name}
-                              title={comp.name}
-                              order={index}
-                            />
-                          );
-                        })}
-                      </Group>
-                      <Divider
-                        mt="xs"
-                        labelPosition="left"
-                        label="Frameworks"
+                    <Text style={{ lineHeight: "2rem" }} size="sm" mt="lg">
+                      Curious by nature and driven by impact, I explore emerging
+                      tech in AI and cloud infrastructure to push products
+                      beyond the expected outcomes through smarter automation,
+                      personalization, or rock-solid scalability.
+                    </Text>
+                    <Group
+                      mt="lg"
+                      mb="xs"
+                      justify="space-between"
+                      onClick={() => setStackOpened(!stackOpened)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Text size="sm" c="gray" fw={500}>
+                        Tech Stack
+                      </Text>
+                      <Expand
+                        opened={stackOpened}
+                        setOpened={() => {
+                          setStackOpened(!stackOpened);
+                          setShowMoreStackOpened(!stackOpened);
+                        }}
                       />
-                      <Group gap="xs">
-                        {frameworks.map((comp, index) => {
-                          return (
-                            <CustomBadge
-                              key={comp.name}
-                              title={comp.name}
-                              order={index}
+                    </Group>
+                    <AnimatePresence>
+                      {stackOpened && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ overflow: "hidden" }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Group gap="md">
+                            {technicalCompetencies.map((comp, index) => {
+                              return (
+                                <CustomBadge
+                                  key={comp.name}
+                                  title={comp.name}
+                                  order={index}
+                                />
+                              );
+                            })}
+                            <ActionIcon
+                              className="glassmorphism-container"
+                              style={{
+                                display: "inline-block",
+                                cursor: "pointer",
+                                transition: "transform .4s ease",
+                                transform: showMoreStackOpened
+                                  ? "rotate(180deg)"
+                                  : "rotate(360deg)",
+                              }}
+                              onClick={() => {
+                                setShowMoreStackOpened(!showMoreStackOpened);
+                              }}
+                            >
+                              {showMoreStackOpened ? (
+                                <RiSubtractFill />
+                              ) : (
+                                <RiAddLargeFill />
+                              )}
+                            </ActionIcon>
+                          </Group>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <AnimatePresence>
+                      {showMoreStackOpened && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ overflow: "hidden" }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Box mt="xs">
+                            <Divider
+                              my="xs"
+                              labelPosition="left"
+                              label="Technologies"
                             />
-                          );
-                        })}
-                      </Group>
-                    </Box>
-                  )}
+                            <Group gap="md">
+                              {technologies.map((comp, index) => {
+                                return (
+                                  <CustomBadge
+                                    key={comp.name}
+                                    title={comp.name}
+                                    order={index}
+                                  />
+                                );
+                              })}
+                            </Group>
+                            <Divider
+                              my="xs"
+                              labelPosition="left"
+                              label="Frameworks"
+                            />
+                            <Group gap="md">
+                              {frameworks.map((comp, index) => {
+                                return (
+                                  <CustomBadge
+                                    key={comp.name}
+                                    title={comp.name}
+                                    order={index}
+                                  />
+                                );
+                              })}
+                            </Group>
+                          </Box>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                    <Group
+                      mt="lg"
+                      mb="xs"
+                      justify="space-between"
+                      align="center"
+                      onClick={() =>
+                        setCertificationsOpened(!certificationsOpened)
+                      }
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Text size="sm" c="gray" fw={500}>
+                        Certifications
+                      </Text>
+                      <Expand
+                        opened={certificationsOpened}
+                        setOpened={setCertificationsOpened}
+                      />
+                    </Group>
+                    <AnimatePresence>
+                      {certificationsOpened && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ overflow: "hidden" }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Grid>
+                            {certifications.map((cert, index) => (
+                              <Certification
+                                key={cert.title}
+                                order={index}
+                                {...cert}
+                              />
+                            ))}
+                          </Grid>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
 
-                  <Group mt="lg" mb="xs" justify="space-between" align="center">
-                    <Text size="sm" c="gray" fw={500}>
-                      Certifications
-                    </Text>
-                    <Expand
-                      opened={educationOpened}
-                      setOpened={setEducationOpened}
-                    />
-                  </Group>
-                  <Grid>
-                    {certifications.map((cert, index) => (
-                      <Certification key={cert.title} order={index} {...cert} />
-                    ))}
-                  </Grid>
-                  <Group mt="lg" mb="xs" justify="space-between" align="center">
-                    <Text size="sm" c="gray" fw={500}>
-                      Academia
-                    </Text>
-                    <Expand
-                      opened={educationOpened}
-                      setOpened={setEducationOpened}
-                    />
-                  </Group>
-                  <Grid>
-                    {education.map((edu) => (
-                      <Education key={edu.title} {...edu} />
-                    ))}
-                  </Grid>
-                </Box>
-                <Title>Experience</Title>
-                {/* Experience Section */}
-                <Box id="experience" component="section">
-                  {experience.map(({ company, jobs, link }) => (
-                    <Experience
-                      key={company}
-                      jobs={jobs}
-                      company={company}
-                      link={link}
-                    />
-                  ))}
-                </Box>
-                <Text>Projects</Text>
-                {/* Projects Section */}
-                <Box id="projects" component="section">
-                  {projects.map((project) => (
-                    <Project key={project.name} {...project} />
-                  ))}
-                </Box>
-              </Box>
-            </Grid.Col>
-          </Grid>
-        </Container>
+                    <Group
+                      mt="lg"
+                      mb="xs"
+                      justify="space-between"
+                      align="center"
+                      onClick={() => setEducationOpened(!educationOpened)}
+                      style={{ cursor: "pointer" }}
+                    >
+                      <Text size="sm" c="gray" fw={500}>
+                        Academia
+                      </Text>
+                      <Expand
+                        opened={educationOpened}
+                        setOpened={setEducationOpened}
+                      />
+                    </Group>
+                    <AnimatePresence>
+                      {educationOpened && (
+                        <motion.div
+                          initial={{ height: 0, opacity: 0 }}
+                          animate={{ height: "auto", opacity: 1 }}
+                          exit={{ height: 0, opacity: 0 }}
+                          style={{ overflow: "hidden" }}
+                          transition={{ duration: 0.3 }}
+                        >
+                          <Grid>
+                            {education.map((edu, index) => (
+                              <Education
+                                key={index}
+                                title={edu.title}
+                                description={edu.description}
+                              />
+                            ))}
+                          </Grid>
+                        </motion.div>
+                      )}
+                    </AnimatePresence>
+                  </Box>
 
-        <Affix
-          position={{ bottom: 20, left: "50%" }}
-          style={{
-            transform: "translateX(-50%)",
-          }}
-        >
-          <IntelligenceMenu />
-        </Affix>
-      </MantineProvider>
+                  {/* Experience Section */}
+                  <Box id="experience" component="section">
+                    {experience.map(({ company, jobs, link }) => (
+                      <Experience
+                        key={company}
+                        jobs={jobs}
+                        company={company}
+                        link={link}
+                      />
+                    ))}
+                  </Box>
+                  <Text>Projects</Text>
+                  {/* Projects Section */}
+                  <Box id="projects" component="section">
+                    {projects.map((project) => (
+                      <Project key={project.name} {...project} />
+                    ))}
+                  </Box>
+                </Box>
+              </Grid.Col>
+            </Grid>
+          </Container>
+
+          <Affix
+            position={{ bottom: 20, left: "50%" }}
+            style={{
+              transform: "translateX(-50%)",
+            }}
+          >
+            <IntelligenceMenu />
+          </Affix>
+        </MantineProvider>
+      </ReduxProvider>
     </>
   );
 }
