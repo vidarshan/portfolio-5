@@ -10,9 +10,9 @@ export function ThemeToggle() {
     return saved || "light";
   });
 
-  useEffect(() => {
-    document.documentElement.classList.toggle("dark", theme === "dark");
-  }, [theme]);
+  // useEffect(() => {
+  //   document.documentElement.classList.toggle("dark", theme === "dark");
+  // }, [theme]);
 
   function toggleTheme() {
     const next = theme === "dark" ? "light" : "dark";

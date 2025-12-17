@@ -7,7 +7,8 @@ import { Input } from "../ui/input";
 import { Button } from "../ui/button";
 import { useRotatingPlaceholder } from "@/hooks/useRotatingPlaceholder";
 import { X } from "lucide-react";
-import { motion } from "framer-motion";
+import { AnimatePresence, motion } from "framer-motion";
+import { useWindowScroll } from "@mantine/hooks";
 
 const AIInput = () => {
   const placeholder = useRotatingPlaceholder(3000);
@@ -16,19 +17,26 @@ const AIInput = () => {
   const handleFocus = () => setOpen(true);
   const closeChat = () => setOpen(false);
 
+  const [scroll, scrollTo] = useWindowScroll();
+  console.log(scroll);
+
   return (
-    <div
-      className=" z-40
-      fixed bottom-1 left-1/2 -translate-x-1/2
-      w-full max-w-md rounded-xl
-      bg-white/40 dark:bg-white/10
-      backdrop-blur-xl
-      border border-black/10 dark:border-white/20
-      shadow-xl
-      overflow-hidden flex flex-col
-    "
+    <motion.div
+      animate={{
+        maxWidth: scroll.y === 0 ? "28rem" : "fit-content",
+      }}
+      transition={{
+        duration: 0.25,
+        ease: "easeOut",
+      }}
+      className="
+    z-40 fixed bottom-4 left-1/2 -translate-x-1/2 w-fill
+    bg-white/40 dark:bg-white/10
+    backdrop-blur-xl
+    border border-black/10 dark:border-white/20
+    shadow-xl rounded-xl overflow-hidden
+  "
     >
-      {" "}
       {open && (
         <motion.div
           key="chat"
@@ -78,32 +86,32 @@ const AIInput = () => {
           <Separator className="bg-black/10 dark:bg-white/20" />
         </motion.div>
       )}
-      {/* Input Row */}
-      <div className="flex items-center gap-2 p-2">
-        <Input
-          type="text"
-          placeholder={placeholder}
-          onFocus={handleFocus}
-          className="
-            flex-1 h-8 px-4 text-base
-            bg-black/5 dark:bg-white/10
-            border border-black/20 dark:border-white/20
-            text-black dark:text-white
-            placeholder:text-black/40 dark:placeholder:text-white/40
-            rounded-lg
-          "
-        />
+
+      <div className="flex items-center gap-2 p-1 whitespace-nowrap">
+        <motion.div
+          animate={{
+            width: scroll.y === 0 ? "100%" : 0,
+            opacity: scroll.y === 0 ? 1 : 0,
+            marginRight: scroll.y === 0 ? 8 : 0,
+            pointerEvents: scroll.y === 0 ? "auto" : "none",
+          }}
+          transition={{ duration: 0.25, ease: "easeOut" }}
+          className="overflow-hidden"
+          style={{
+            minWidth: 0,
+            flexShrink: 1,
+          }}
+        ></motion.div>
+
         <Button
           type="submit"
-          className="
-            h-8 px-4 rounded-lg flex items-center gap-2
-          "
+          className="h-8 px-4 rounded-lg flex items-center gap-2"
         >
           <RiOpenaiFill />
           Ask ChatGPT
         </Button>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
