@@ -1,8 +1,11 @@
 import { getClientId } from "@/app/utils/clientId";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { ChatBubble } from "./ChatBubble";
 import { Dot, X } from "lucide-react";
 import { GoDotFill } from "react-icons/go";
+import { formatDateTime } from "@/app/utils/dateFormat";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
+import { Separator } from "../ui/separator";
 
 interface ChatMessage {
   client_id: string;
@@ -13,7 +16,9 @@ interface ChatMessage {
 }
 
 const ChatMenu = () => {
+  const bottomRef = useRef<HTMLDivElement | null>(null);
   const [clientId, setClientId] = useState<string | null>(null);
+  const [chatUsage, setChatUsage] = useState<number>(0);
   const [chatHistory, setChatHistory] = useState<ChatMessage[]>([]);
   const [collapsed, setCollapsed] = useState(false);
   const [opened, setOpened] = useState(false);
@@ -37,26 +42,69 @@ const ChatMenu = () => {
     if (!res.ok) throw new Error("Fetch failed");
 
     const data = await res.json();
-    return data?.data;
+    return data;
   }
 
-  async function submit() {
-    if (!input.trim()) return;
+  // async function submit() {
+  //   if (!input.trim()) return;
 
-    setLoading(true);
-    setReply(null);
+  //   setLoading(true);
+  //   setReply(null);
 
+  //   const res = await fetch("/api/chat", {
+  //     method: "POST",
+  //     headers: { "Content-Type": "application/json" },
+  //     body: JSON.stringify({ message: input, clientId: getClientId() }),
+  //   });
+
+  //   const data = await res.json();
+  //   console.log(data);
+  //   setReply(data.reply);
+  //   setLoading(false);
+  // }
+
+  useEffect(() => {
+    bottomRef.current?.scrollIntoView({
+      behavior: "smooth",
+      block: "end",
+    });
+  }, [chatHistory]);
+
+  async function sendMessage() {
+    const clientId = getClientId();
+
+    // 1. Optimistically add user message
+    const userMessage: ChatMessage = {
+      id: crypto.randomUUID(),
+      client_id: clientId,
+      role: "user",
+      content: input,
+      created_at: new Date().toISOString(),
+    };
+
+    setChatHistory((prev) => [...prev, userMessage]);
+
+    // 2. Send to server
     const res = await fetch("/api/chat", {
       method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ message: input, clientId: getClientId() }),
+      body: JSON.stringify({ message: input, clientId }),
     });
 
     const data = await res.json();
-    console.log(data);
-    setReply(data.reply);
-    setLoading(false);
+
+    // 3. Add assistant message
+    setChatHistory((prev) => [
+      ...prev,
+      {
+        id: crypto.randomUUID(),
+        client_id: clientId,
+        role: "assistant",
+        content: data.reply,
+        created_at: new Date().toISOString(),
+      },
+    ]);
   }
+
   console.log("Client ID in ChatMenu:", clientId);
   useEffect(() => {
     if (!opened) return;
@@ -66,8 +114,10 @@ const ChatMenu = () => {
     (async () => {
       try {
         const data = await fetchChatHistory(getClientId());
+        console.log("Fetched chat history data:", data);
         if (isActive) {
-          setChatHistory(data || []);
+          setChatHistory(data?.data || []);
+          setChatUsage(data?.usage?.count || 0);
         }
       } catch (err) {
         console.error("Failed to fetch chat history", err);
@@ -115,7 +165,7 @@ const ChatMenu = () => {
             </div>
 
             <span className="text-xs font-medium text-neutral-500">
-              1 / 20 remaining
+              {20 - chatUsage} / 20 remaining
             </span>
             <X onClick={() => setOpened(false)} />
           </div>
@@ -125,9 +175,27 @@ const ChatMenu = () => {
 
           {/* Chat area */}
           <div className="relative flex max-h-64 overflow-x-hidden overflow-y-auto overflow-scroll flex-col gap-3 hide-scrollbar">
+            <Alert className="bg-transparent border-none p-0">
+              <AlertTitle className="text-sm text-neutral-500">
+                Welcome to AI Overview
+              </AlertTitle>
+
+              <AlertDescription className="mt-1 text-sm text-neutral-500 leading-relaxed">
+                Use this space to get personalized insights about{" "}
+                Vidarshan&apos;s work, projects, and experience.
+                <br />
+                <span className="mt-2 block text-xs text-neutral-400">
+                  Messages are automatically deleted on the 1st of each month.
+                </span>
+              </AlertDescription>
+            </Alert>
+            <Separator />
             {chatHistory.map((msg) => (
-              <ChatBubble key={msg.id} role={msg.role} content={msg.content} />
+              <div key={msg.id}>
+                <ChatBubble role={msg.role} content={msg.content} created_at={msg.created_at} />
+              </div>
             ))}
+            <div ref={bottomRef} />
             {/* <ChatBubble
               role="assistant"
               content="Hello! I'm your AI assistant. How can I help you today?"
@@ -156,7 +224,7 @@ const ChatMenu = () => {
             value={input}
             onFocus={() => setOpened(true)}
             onChange={(e) => setInput(e.target.value)}
-            onKeyDown={(e) => e.key === "Enter" && submit()}
+            onKeyDown={(e) => e.key === "Enter" && sendMessage()}
             placeholder="Ask me anything about my work"
             className="flex-1 bg-transparent text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 outline-none"
           />

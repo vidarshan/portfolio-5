@@ -25,6 +25,12 @@ export async function GET(req: Request) {
     );
   }
 
+  const { data: usageData } = await supabaseAdmin
+    .from("chat_usage")
+    .select("*")
+    .eq("client_id", clientId)
+    .eq("month", month);
+
   const { data, error } = await supabaseAdmin
     .from("chat_messages")
     .select("*")
@@ -35,7 +41,7 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ data });
+  return NextResponse.json({ data, usage: usageData?.[0] || null });
 }
 
 export async function POST(req: Request) {

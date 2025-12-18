@@ -1,17 +1,22 @@
+import { formatDateTime } from "@/app/utils/dateFormat";
 import { JSX } from "react";
 
 type ChatBubbleProps = {
   role: "user" | "assistant";
   content: JSX.Element | string;
+  created_at: string;
 };
 
-export const ChatBubble = ({ role, content }: ChatBubbleProps) => {
+export const ChatBubble = ({ role, content, created_at }: ChatBubbleProps) => {
   const isUser = role === "user";
 
   return (
-    <div className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}>
+    <div>
       <div
-        className={`
+        className={`flex w-full ${isUser ? "justify-end" : "justify-start"}`}
+      >
+        <div
+          className={`
           relative max-w-[75%] px-4 py-2 text-sm leading-relaxed
           rounded-2xl
           ${
@@ -30,11 +35,11 @@ export const ChatBubble = ({ role, content }: ChatBubbleProps) => {
             `
           }
         `}
-      >
-        {/* Assistant spectral edge */}
-        {!isUser && (
-          <div
-            className="
+        >
+          {/* Assistant spectral edge */}
+          {!isUser && (
+            <div
+              className="
               pointer-events-none absolute inset-0 rounded-2xl
               ring-1 ring-transparent
               before:absolute before:inset-0 before:rounded-2xl
@@ -45,10 +50,18 @@ export const ChatBubble = ({ role, content }: ChatBubbleProps) => {
               before:to-[#EF4444]/10
               before:opacity-60
             "
-          />
-        )}
+            />
+          )}
 
-        <span className="relative z-10">{content}</span>
+          <span className="relative z-10">{content}</span>
+        </div>
+      </div>
+      <div
+        className={`w-full text-xs text-neutral-500 ${
+          isUser ? "text-right" : "text-left"
+        } mt-1`}
+      >
+        {formatDateTime(created_at)}
       </div>
     </div>
   );
