@@ -1,3 +1,9 @@
-div{
-  background-color: red !important;
+/* Hide scrollbar but allow scroll */
+.hide-scrollbar {
+  -ms-overflow-style: none !important;   /* IE + Edge */
+  scrollbar-width: none !important;      /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;            /* Chrome, Safari */
 }

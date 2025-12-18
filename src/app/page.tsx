@@ -25,6 +25,7 @@ import { motion } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import LeftSideBar from "@/components/custom/LeftSideBar";
 import RightSideBar from "@/components/custom/RightSideBar";
+import ChatMenu from "@/components/custom/ChatMenu";
 
 const geist = Geist({
   subsets: ["latin"],
@@ -45,39 +46,6 @@ function ThemeToggle({
     >
       {theme === "dark" ? <Sun size={16} /> : <Moon size={16} />}
     </button>
-  );
-}
-
-function AskMeAnything() {
-  const [collapsed, setCollapsed] = React.useState(false);
-
-  React.useEffect(() => {
-    const onScroll = () => {
-      setCollapsed(window.scrollY > 80);
-    };
-    window.addEventListener("scroll", onScroll);
-    return () => window.removeEventListener("scroll", onScroll);
-  }, []);
-
-  return (
-    <div className="fixed bottom-4 left-1/2 -translate-x-1/2 z-50 px-4 w-full max-w-md">
-      {!collapsed ? (
-        <div className="flex items-center gap-3 rounded-xl bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-300 dark:border-neutral-800 shadow-xl px-4 py-3">
-          <input
-            placeholder="Ask me anything about my work"
-            className="flex-1 bg-transparent text-sm text-neutral-900 dark:text-neutral-200 placeholder:text-neutral-500 outline-none"
-          />
-          <span className="text-xs text-neutral-500">↵</span>
-        </div>
-      ) : (
-        <button
-          onClick={() => setCollapsed(false)}
-          className="w-full rounded-full bg-white/80 dark:bg-neutral-900/80 backdrop-blur border border-neutral-300 dark:border-neutral-800 shadow-xl px-5 py-3 text-sm text-neutral-900 dark:text-neutral-200 hover:bg-neutral-100 dark:hover:bg-neutral-800 transition"
-        >
-          Ask me anything
-        </button>
-      )}
-    </div>
   );
 }
 
@@ -115,7 +83,7 @@ export default function Home() {
         </div>
       </div>
 
-      <AskMeAnything />
+      <ChatMenu />
     </main>
   );
 }

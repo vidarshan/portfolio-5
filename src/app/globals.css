@@ -125,3 +125,12 @@
     @apply bg-background text-foreground;
   }
 }
+
+.hide-scrollbar {
+  -ms-overflow-style: none !important;   /* IE + Edge */
+  scrollbar-width: none !important;      /* Firefox */
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none !important;            /* Chrome, Safari */
+}
