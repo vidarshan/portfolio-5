@@ -1,8 +1,9 @@
 import OpenAI from "openai";
 import { NextResponse } from "next/server";
 import { createClient } from "@supabase/supabase-js";
+import { getQuota, getRemainingQuota } from "@/app/utils/getQuota";
 
-const MAX_REQUESTS = 20;
+const MAX_REQUESTS = getQuota();
 const month = new Date().toISOString().slice(0, 7);
 
 const client = new OpenAI({
@@ -41,29 +42,43 @@ export async function GET(req: Request) {
     return NextResponse.json({ error: error.message }, { status: 500 });
   }
 
-  return NextResponse.json({ data, usage: usageData?.[0] || null });
+  return NextResponse.json({
+    data,
+    maxQuota: MAX_REQUESTS,
+    remaining: MAX_REQUESTS - (usageData?.[0].count || 0),
+  });
 }
 
 export async function POST(req: Request) {
   const { message, clientId } = await req.json();
 
-  const { data } = await supabaseAdmin
+  const month = new Date().toISOString().slice(0, 7);
+  const MAX_REQUESTS = getQuota();
+
+  const { data: usage, error: usageError } = await supabaseAdmin
     .from("chat_usage")
-    .select("*")
+    .select("count")
     .eq("client_id", clientId)
     .eq("month", month)
     .single();
 
-  console.log("Usage data:", data);
+  if (usageError && usageError.code !== "PGRST116") {
+    console.error("Failed to fetch usage:", usageError);
+  }
 
-  if (data && data.count >= MAX_REQUESTS) {
+  const currentCount = usage?.count ?? 0;
+
+  if (currentCount >= MAX_REQUESTS) {
     return NextResponse.json(
-      { error: "Monthly limit reached" },
+      {
+        error: "Monthly limit reached",
+        maxQuota: MAX_REQUESTS,
+        remaining: 0,
+      },
       { status: 429 }
     );
   }
 
-  // Insert user message
   const { error: userError } = await supabaseAdmin
     .from("chat_messages")
     .insert({
@@ -75,31 +90,44 @@ export async function POST(req: Request) {
   if (userError) {
     console.error("User insert failed:", userError);
   }
-  console.log(
-    "Using service role:",
-    process.env.SUPABASE_SERVICE_ROLE_KEY?.slice(0, 10)
-  );
 
-  await supabaseAdmin.from("chat_usage").upsert({
-    client_id: clientId,
-    month,
-    count: (data?.count ?? 0) + 1,
-  });
+  const reply = "";
 
-  const assistantReply = "Hello!";
+  const { data: updatedUsage, error: upsertError } = await supabaseAdmin
+    .from("chat_usage")
+    .upsert(
+      {
+        client_id: clientId,
+        month,
+        count: currentCount + 1,
+      },
+      { onConflict: "client_id,month" }
+    )
+    .select("count")
+    .single();
 
-  // Insert assistant message
+  if (upsertError) {
+    console.error("Usage upsert failed:", upsertError);
+  }
+
+  const finalUsage = updatedUsage?.count ?? currentCount + 1;
+  const remaining = Math.max(0, MAX_REQUESTS - finalUsage);
+
   const { error: assistantError } = await supabaseAdmin
     .from("chat_messages")
     .insert({
       client_id: clientId,
       role: "assistant",
-      content: assistantReply,
+      content: reply,
     });
 
   if (assistantError) {
     console.error("Assistant insert failed:", assistantError);
   }
 
-  return NextResponse.json({ reply: assistantReply });
+  return NextResponse.json({
+    reply,
+    maxQuota: MAX_REQUESTS,
+    remaining,
+  });
 }

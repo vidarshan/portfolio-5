@@ -19,21 +19,22 @@ export const ChatBubble = ({ role, content, created_at }: ChatBubbleProps) => {
           className={`
           relative max-w-[75%] px-4 py-2 text-sm leading-relaxed
           rounded-2xl
-          ${
-            isUser
-              ? `
-              bg-neutral-900 text-white
-              dark:bg-neutral-100 dark:text-neutral-900
-              rounded-br-md
-            `
-              : `
-              bg-white/80 dark:bg-neutral-800/80
-              text-neutral-900 dark:text-neutral-100
-              border border-neutral-200/60 dark:border-neutral-700/60
-              rounded-bl-md
-              shadow-sm
-            `
-          }
+         ${
+           isUser
+             ? `
+      bg-neutral-900 text-white
+      dark:bg-neutral-100 dark:text-neutral-900
+      rounded-br-md
+      overflow-hidden
+    `
+             : `
+      bg-white/80 dark:bg-neutral-800/80
+      text-neutral-900 dark:text-neutral-100
+      rounded-bl-md
+      shadow-sm
+      overflow-hidden
+    `
+         }
         `}
         >
           {/* Assistant spectral edge */}
@@ -49,6 +50,7 @@ export const ChatBubble = ({ role, content, created_at }: ChatBubbleProps) => {
               before:via-[#EC4899]/10
               before:to-[#EF4444]/10
               before:opacity-60
+             
             "
             />
           )}
